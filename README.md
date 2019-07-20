@@ -1,4 +1,4 @@
-# YouTube Music Desktop
+# Desktop YouTube Music
 Ever wanted to use YouTube Music but with the functionality of a desktop app?
 
 # Features
