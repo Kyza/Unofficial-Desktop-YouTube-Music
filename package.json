@@ -1,6 +1,6 @@
 {
   "name": "youtubemusicdesktop",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Ever wanted to use YouTube Music but with the functionality of a desktop app?",
   "main": "index.js",
   "dependencies": {},
