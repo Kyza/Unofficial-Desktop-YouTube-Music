@@ -20,7 +20,8 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+			webviewTag: true
     },
     title: "YouTube Music",
     icon: __dirname + "/images/favicon.png"
@@ -67,7 +68,7 @@ function createWindow() {
   win.maximize();
 
   // and load the index.html of the app.
-  win.loadURL("https://music.youtube.com/");
+  win.loadFile("./index.html");
 
   // Open the DevTools.
   // win.webContents.openDevTools();
