@@ -1,0 +1,23 @@
+{
+  "name": "youtubemusicdesktop",
+  "version": "1.0.0",
+  "description": "Ever wanted to use YouTube Music but with the functionality of a desktop app?",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^5.0.7"
+  },
+  "scripts": {
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KyzaGitHub/YouTubeMusicDesktop.git"
+  },
+  "author": "Kyza",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/KyzaGitHub/YouTubeMusicDesktop/issues"
+  },
+  "homepage": "https://github.com/KyzaGitHub/YouTubeMusicDesktop#readme"
+}
