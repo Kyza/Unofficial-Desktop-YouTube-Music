@@ -8,7 +8,7 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 - [x] Full YouTube Music functionality.
   - [x] Log in.
   - [x] Saves login credentials.
-  - [x] Create, delete and manage playlists.
+  - [x] Create, delete, and manage playlists.
   - [x] Loop, like, dislike, and share songs.
 - [ ] Spotify-like desktop functions.
   - [x] Persistent window that hides when closed.
