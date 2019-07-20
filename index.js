@@ -93,6 +93,7 @@ function hiddenContextMenu() {
       label: "Quit",
       click: function() {
         isQuiting = true;
+				tray.destroy();
         app.quit();
       }
     }
@@ -105,6 +106,7 @@ function shownContextMenu() {
     label: "Quit",
     click: function() {
       isQuiting = true;
+			tray.destroy();
       app.quit();
     }
   }]);
@@ -135,6 +137,7 @@ app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
+		tray.destroy();
     app.quit();
   }
 });
