@@ -2,10 +2,73 @@ const {
   app,
   BrowserWindow,
   Tray,
-  Menu
+  Menu,
+	ipcMain
 } = require("electron");
 
 const path = require("path");
+
+// Set the Discord Rish Presence.
+const client = require('discord-rich-presence')('602320411216052240');
+
+ipcMain.on("rich-presence-data", (event, arg) => {
+	console.log(arg);
+	setRPData(arg);
+	setActivity();
+});
+
+function setRPData(data) {
+	songName = data.songName;
+	songAuthor = data.songAuthor;
+	songStartedTime = data.songStartedTime;
+	songEndsTime = data.songEndsTime;
+	songPaused = data.songPaused;
+}
+
+var songName = "";
+var songAuthor = "";
+
+var songStartedTime = Date.now();
+var songEndsTime = Date.now() + 133337;
+
+var songPaused = false;
+
+var lookingForSong = false;
+
+function setActivity() {
+	if (!songPaused) {
+		client.updatePresence({
+			state: songAuthor,
+			details: songName,
+			startTimestamp: songStartedTime,
+			endTimestamp: songEndsTime,
+			largeImageKey: 'logo',
+			smallImageKey: 'kyza',
+			largeImageText: "bit.ly/DesktopYTMusic",
+			smallImageText: "@Kyza#9994"
+		});
+	} else if (lookingForSong) {
+		client.updatePresence({
+			state: "Searching for a song",
+			details: "Paused",
+			startTimestamp: songStartedTime,
+			largeImageKey: 'logo',
+			smallImageKey: 'kyza',
+			largeImageText: "bit.ly/DesktopYTMusic",
+			smallImageText: "@Kyza#9994"
+		});
+	} else {
+		client.updatePresence({
+			state: "Listening to silence",
+			details: "Paused",
+			startTimestamp: songStartedTime,
+			largeImageKey: 'logo',
+			smallImageKey: 'kyza',
+			largeImageText: "bit.ly/DesktopYTMusic",
+			smallImageText: "@Kyza#9994"
+		});
+	}
+}
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -21,7 +84,7 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-			webviewTag: true
+      webviewTag: true
     },
     title: "YouTube Music",
     icon: __dirname + "/images/favicon.png"
@@ -31,9 +94,9 @@ function createWindow() {
   tray = new Tray(__dirname + "/images/favicon.png");
   tray.setToolTip("YouTube Music");
 
-	tray.on("double-click", function() {
-		showWindow();
-	});
+  tray.on("double-click", function() {
+    showWindow();
+  });
 
   showWindow();
 
@@ -71,7 +134,7 @@ function createWindow() {
   win.loadFile("./index.html");
 
   // Open the DevTools.
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.on("close", function(event) {
     if (!isQuiting) {
@@ -93,7 +156,8 @@ function hiddenContextMenu() {
       label: "Quit",
       click: function() {
         isQuiting = true;
-				tray.destroy();
+        tray.destroy();
+				client.disconnect();
         app.quit();
       }
     }
@@ -106,7 +170,8 @@ function shownContextMenu() {
     label: "Quit",
     click: function() {
       isQuiting = true;
-			tray.destroy();
+      tray.destroy();
+			client.disconnect();
       app.quit();
     }
   }]);
@@ -114,13 +179,13 @@ function shownContextMenu() {
 }
 
 function showWindow() {
-	win.show();
-	shownContextMenu();
+  win.show();
+  shownContextMenu();
 }
 
 function hideWindow() {
-	win.hide();
-	hiddenContextMenu();
+  win.hide();
+  hiddenContextMenu();
 }
 
 // This method will be called when Electron has finished
@@ -137,7 +202,7 @@ app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") {
-		tray.destroy();
+    tray.destroy();
     app.quit();
   }
 });

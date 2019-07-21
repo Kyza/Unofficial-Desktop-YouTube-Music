@@ -2,13 +2,17 @@
 	<div id="loading-text">
 		Loading...
 	</div>
-	<webview src="https://music.youtube.com/" httpreferrer="https://music.youtube.com/" nodeintegration disablewebsecurity allowpopups></webview>
+	<webview src="https://music.youtube.com/" httpreferrer="https://music.youtube.com/" preload="./preload.js" nodeintegration disablewebsecurity allowpopups></webview>
 	<script>
+		const {
+			ipcRenderer
+		} = require('electron');
+
 		const webview = document.querySelector("webview");
 		const loadingText = document.querySelector("#loading-text");
 
 		webview.addEventListener("dom-ready", () => {
-			// webview.openDevTools();
+			webview.openDevTools();
 		});
 
 		const loadStart = () => {
@@ -27,5 +31,89 @@
 
 		webview.addEventListener("did-start-loading", loadStart);
 		webview.addEventListener("did-stop-loading", loadStop);
+
+
+		webview.addEventListener("ipc-message", function(e) {
+			if (e.channel === "window-data") {
+				var webviewDOM = document.createElement("html");
+				webviewDOM.innerHTML = e.args[0].html;
+
+				var selectedElement = webviewDOM.querySelector(".title.ytmusic-player-bar");
+				if (selectedElement) {
+					songName = selectedElement.textContent;
+				}
+
+				selectedElement = webviewDOM.querySelector(".byline.ytmusic-player-bar");
+				if (selectedElement) {
+					if (selectedElement.textContent != "Video will play after ad") {
+						songAuthor = selectedElement.textContent;
+					}
+				}
+
+				//time-info style-scope ytmusic-player-bar
+				selectedElement = webviewDOM.querySelector(".time-info.ytmusic-player-bar");
+				if (selectedElement) {
+					var currentTime = selectedElement.textContent.split("/")[0].trim();
+					var totalTime = selectedElement.textContent.split("/")[1].trim();
+
+					try {
+						var currentTimeMS = (parseInt(currentTime.split(":")[1]) * 1000) + (parseInt(currentTime.split(":")[0]) * 60000);
+						var totalTimeMS = (parseInt(totalTime.split(":")[1]) * 1000) + (parseInt(totalTime.split(":")[0]) * 60000);
+
+						songStartedTime = Date.now();
+						songEndsTime = Date.now() + totalTimeMS - currentTimeMS + 1000;
+					} catch (e) {}
+				}
+
+				selectedElement = webviewDOM.querySelector("#play-pause-button");
+				if (selectedElement) {
+					songPaused = (selectedElement.title == "Play" ? true : false);
+					if (songName.trim() == "" || songAuthor.trim() == "") {
+						songPaused = true;
+					}
+					if (!songPaused) {
+						sentPaused = false;
+					}
+				}
+			}
+		});
+
+
+		var songAuthor = "";
+		var songName = "";
+
+		var songStartedTime = Date.now();
+		var songEndsTime = Date.now();
+
+		var songPaused = true;
+
+		var sentPaused = false;
+
+		function sendRPData() {
+			if (songPaused && !sentPaused) {
+				sentPaused = true;
+				ipcRenderer.send("rich-presence-data", {
+					"songName": songName,
+					"songAuthor": songAuthor,
+					"songStartedTime": songStartedTime,
+					"songEndsTime": songEndsTime,
+					"songPaused": songPaused
+				});
+			} else if (!songPaused) {
+				ipcRenderer.send("rich-presence-data", {
+					"songName": songName,
+					"songAuthor": songAuthor,
+					"songStartedTime": songStartedTime,
+					"songEndsTime": songEndsTime,
+					"songPaused": songPaused
+				});
+			}
+		}
+
+		sendRPData();
+
+		setInterval(() => {
+			sendRPData();
+		}, 15e3);
 	</script>
 </body>

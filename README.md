@@ -5,6 +5,7 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 
 - [x] Super lightweight.
 - [x] Faster performance than Spotify, with a larger selection of songs.
+- [x] Discord Rich Presence.
 - [x] Full YouTube Music functionality.
   - [x] Log in.
   - [x] Saves login credentials.
