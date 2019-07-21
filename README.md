@@ -25,6 +25,8 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 
 <img src="https://i.vgy.me/pJDHHU.png" />
 
+<img src="https://i.vgy.me/qEGICa.png" />
+
 <img src="https://i.vgy.me/Cbr2ZB.png" />
 
 # How To Use
