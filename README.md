@@ -35,7 +35,7 @@ Once you have installed the latest version of [NodeJS](https://nodejs.org/), you
 
 - Either clone the repository, or download the ZIP.
 - If you downloaded the ZIP, extract it.
-- Run `start.cmd`.
+- Run `start.cmd` (`start` if you have file extensions turned off).
 
 # Disclaimers
 
