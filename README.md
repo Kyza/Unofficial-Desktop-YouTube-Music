@@ -25,6 +25,8 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 
 <img src="https://i.vgy.me/pJDHHU.png" />
 
+<img src="https://i.vgy.me/Cbr2ZB.png" />
+
 # How To Use
 
 Currently, Desktop YouTube Music is in alpha and does not come compiled. This means that you will need to install [NodeJS](https://nodejs.org/) in order to run this program.
