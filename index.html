@@ -61,7 +61,7 @@
 						var totalTimeMS = (parseInt(totalTime.split(":")[1]) * 1000) + (parseInt(totalTime.split(":")[0]) * 60000);
 
 						songStartedTime = Date.now();
-						songEndsTime = Date.now() + totalTimeMS - currentTimeMS + 1000;
+						songEndsTime = Date.now() + totalTimeMS - currentTimeMS;
 					} catch (e) {}
 				}
 
