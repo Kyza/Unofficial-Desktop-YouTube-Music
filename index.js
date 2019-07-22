@@ -18,11 +18,6 @@ const fs = require("fs");
 
 const path = require("path");
 
-checkForUpdate();
-setInterval(() => {
-  checkForUpdate();
-}, 30e3 * 60); // Check for updates every 30 minutes.
-
 function checkForUpdate() {
   request({
     url: "http://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases",
@@ -32,7 +27,7 @@ function checkForUpdate() {
     json: true
   }, function(error, response, body) {
     try {
-      var currentVersion = process.env.npm_package_version;
+      var currentVersion = app.getVersion();
       var latestVersion = body[0].tag_name.replace("v", "");
       if (currentVersion != latestVersion) {
         var doInstall = dialog.showMessageBox(win, {
@@ -163,6 +158,12 @@ let tray;
 let trayMenu;
 
 function createWindow() {
+  checkForUpdate();
+  setInterval(() => {
+    checkForUpdate();
+  }, 30e3 * 60); // Check for updates every 30 minutes.
+
+
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
