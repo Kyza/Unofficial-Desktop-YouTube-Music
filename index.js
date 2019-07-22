@@ -3,20 +3,89 @@ const {
   BrowserWindow,
   Tray,
   Menu,
+  dialog,
   ipcMain
 } = require("electron");
 
-const path = require("path");
 const {
-  autoUpdater
-} = require("electron-updater");
-const log = require("electron-log");
+  exec
+} = require('child_process');
 
+const request = require("request");
+const rp = require("request-promise");
+
+const fs = require("fs");
+
+const path = require("path");
+
+checkForUpdate();
 setInterval(() => {
-  log.transports.file.level = "debug";
-  autoUpdater.logger = log;
-  autoUpdater.checkForUpdatesAndNotify();
-}, 30e3);
+  // checkForUpdate();
+}, 5e3 * 60); // Check for updates every 5 minutes.
+
+function checkForUpdate() {
+  request({
+    url: "http://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases",
+    headers: {
+      "User-Agent": "Awesome-Octocat-App"
+    },
+    json: true
+  }, function(error, response, body) {
+    dialog.showMessageBox({
+      'message': JSON.stringify(body)
+    });
+
+    var currentVersion = process.env.npm_package_version;
+    var latestVersion = body[0].tag_name.replace("v", "");
+    if (currentVersion != latestVersion) {
+      dialog.showMessageBox({
+        'message': "There appears to be a new version!\nCurrent Version: " + currentVersion + "\nLatest Version: " + latestVersion + "\n\nWould you like me to automatically install it?"
+      });
+
+      downloadInstallNewVersion(body[0].id);
+    }
+  });
+}
+
+function downloadInstallNewVersion(versionID) {
+  request({
+    url: "https://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases/" + versionID + "/assets",
+    headers: {
+      "User-Agent": "Awesome-Octocat-App"
+    },
+    json: true
+  }, (error, response, body) => {
+    for (let i = 0; i < body.length; i++) {
+      var fileName = "./" + body[i].browser_download_url.split("/")[body[i].browser_download_url.split("/").length - 1];
+
+      rp({
+        url: body[i].browser_download_url,
+        headers: {
+          "User-Agent": "Awesome-Octocat-App"
+        }
+      }).pipe(fs.createWriteStream(fileName));
+
+      dialog.showMessageBox({
+        'message': fileName
+      });
+
+      exec(fileName, (err, stdout, stderr) => {
+        if (err) {
+          //some err occurred
+          console.error(err)
+        } else {
+          // the *entire* stdout and stderr (buffered)
+          dialog.showMessageBox({
+            'message': `stdout: ${stdout}`
+          });
+          dialog.showMessageBox({
+            'message': `stderr: ${stderr}`
+          });
+        }
+      });
+    }
+  });
+}
 
 // Set the Discord Rish Presence.
 const client = require('discord-rich-presence')('602320411216052240');
