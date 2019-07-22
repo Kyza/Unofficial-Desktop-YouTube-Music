@@ -20,8 +20,8 @@ const path = require("path");
 
 checkForUpdate();
 setInterval(() => {
-  // checkForUpdate();
-}, 5e3 * 60); // Check for updates every 5 minutes.
+  checkForUpdate();
+}, 30e3 * 60); // Check for updates every 30 minutes.
 
 function checkForUpdate() {
   request({
@@ -31,18 +31,28 @@ function checkForUpdate() {
     },
     json: true
   }, function(error, response, body) {
-    dialog.showMessageBox({
-      'message': JSON.stringify(body)
-    });
+    try {
+      var currentVersion = process.env.npm_package_version;
+      var latestVersion = body[0].tag_name.replace("v", "");
+      if (currentVersion != latestVersion) {
+        var doInstall = dialog.showMessageBox(win, {
+          "type": 'question',
+          "buttons": ['Yes', 'No'],
+          "title": 'Install new version?',
+          "message": "There appears to be a new version!\nCurrent Version: " + currentVersion + "\nLatest Version: " + latestVersion + "\n\nWould you like me to install it?"
+        }, function(response) {
+          if (response === 0) {
+            win.close();
+            tray.destroy();
 
-    var currentVersion = process.env.npm_package_version;
-    var latestVersion = body[0].tag_name.replace("v", "");
-    if (currentVersion != latestVersion) {
+            downloadInstallNewVersion(body[0].id);
+          }
+        });
+      }
+    } catch (e) {
       dialog.showMessageBox({
-        'message': "There appears to be a new version!\nCurrent Version: " + currentVersion + "\nLatest Version: " + latestVersion + "\n\nWould you like me to automatically install it?"
+        'message': JSON.stringify(body)
       });
-
-      downloadInstallNewVersion(body[0].id);
     }
   });
 }
@@ -54,34 +64,30 @@ function downloadInstallNewVersion(versionID) {
       "User-Agent": "Awesome-Octocat-App"
     },
     json: true
-  }, (error, response, body) => {
+  }, function(error, response, body) {
     for (let i = 0; i < body.length; i++) {
       var fileName = "./" + body[i].browser_download_url.split("/")[body[i].browser_download_url.split("/").length - 1];
+      var filePath = __dirname + "/" + fileName.replace("./", "");
 
-      rp({
+      var stream = request({
         url: body[i].browser_download_url,
         headers: {
           "User-Agent": "Awesome-Octocat-App"
         }
       }).pipe(fs.createWriteStream(fileName));
 
-      dialog.showMessageBox({
-        'message': fileName
-      });
-
-      exec(fileName, (err, stdout, stderr) => {
-        if (err) {
-          //some err occurred
-          console.error(err)
-        } else {
-          // the *entire* stdout and stderr (buffered)
-          dialog.showMessageBox({
-            'message': `stdout: ${stdout}`
-          });
-          dialog.showMessageBox({
-            'message': `stderr: ${stderr}`
-          });
-        }
+      stream.on('finish', function() {
+        exec(filePath, (err, stdout, stderr) => {
+          if (err) {
+            //some err occurred
+            dialog.showMessageBox({
+              'message': `${err}`
+            });
+          } else {
+            // Once finished, close the current app.
+            app.exit(0);
+          }
+        });
       });
     }
   });

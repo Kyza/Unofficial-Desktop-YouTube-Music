@@ -32,14 +32,9 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 
 # How To Use
 
-Currently, Desktop YouTube Music is in alpha and does not come compiled. This means that you will need to install [NodeJS](https://nodejs.org/) in order to run this program.
+It's easy! Just go to [releases](https://github.com/KyzaGitHub/Desktop-YouTube-Music/releases), expand `Assets`, and install the correct version for your computer. No MacOS or Linux yet, sorry guys.
 
-Once you have installed the latest version of [NodeJS](https://nodejs.org/), you will be able to proceed.
-
-- Either clone the repository, or download the ZIP.
-- If you downloaded the ZIP, extract it.
-- Run `start.cmd`
-  - `start` if you have file extensions turned off.
+<img src="https://i.vgy.me/lqzdCn.png" />
 
 # Disclaimers
 
