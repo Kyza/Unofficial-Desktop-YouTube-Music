@@ -3,7 +3,7 @@ const {
   BrowserWindow,
   Tray,
   Menu,
-	ipcMain
+  ipcMain
 } = require("electron");
 
 const path = require("path");
@@ -12,17 +12,17 @@ const path = require("path");
 const client = require('discord-rich-presence')('602320411216052240');
 
 ipcMain.on("rich-presence-data", (event, arg) => {
-	console.log(arg);
-	setRPData(arg);
-	setActivity();
+  console.log(arg);
+  setRPData(arg);
+  setActivity();
 });
 
 function setRPData(data) {
-	songName = data.songName;
-	songAuthor = data.songAuthor;
-	songStartedTime = data.songStartedTime;
-	songEndsTime = data.songEndsTime;
-	songPaused = data.songPaused;
+  songName = data.songName;
+  songAuthor = data.songAuthor;
+  songStartedTime = data.songStartedTime;
+  songEndsTime = data.songEndsTime;
+  songPaused = data.songPaused;
 }
 
 var songName = "";
@@ -36,38 +36,38 @@ var songPaused = false;
 var lookingForSong = false;
 
 function setActivity() {
-	if (!songPaused) {
-		client.updatePresence({
-			state: songAuthor,
-			details: songName,
-			startTimestamp: songStartedTime,
-			endTimestamp: songEndsTime,
-			largeImageKey: 'logo',
-			smallImageKey: 'kyza',
-			largeImageText: "bit.ly/DesktopYTMusic",
-			smallImageText: "@Kyza#9994"
-		});
-	} else if (lookingForSong) {
-		client.updatePresence({
-			state: "Searching for a song",
-			details: "Paused",
-			startTimestamp: songStartedTime,
-			largeImageKey: 'logo',
-			smallImageKey: 'kyza',
-			largeImageText: "bit.ly/DesktopYTMusic",
-			smallImageText: "@Kyza#9994"
-		});
-	} else {
-		client.updatePresence({
-			state: "Listening to silence",
-			details: "Paused",
-			startTimestamp: songStartedTime,
-			largeImageKey: 'logo',
-			smallImageKey: 'kyza',
-			largeImageText: "bit.ly/DesktopYTMusic",
-			smallImageText: "@Kyza#9994"
-		});
-	}
+  if (!songPaused) {
+    client.updatePresence({
+      state: songAuthor,
+      details: songName,
+      startTimestamp: songStartedTime,
+      endTimestamp: songEndsTime,
+      largeImageKey: 'logo',
+      smallImageKey: 'kyza',
+      largeImageText: "bit.ly/DesktopYTMusic",
+      smallImageText: "@Kyza#9994"
+    });
+  } else if (lookingForSong) {
+    client.updatePresence({
+      state: "Searching for a song",
+      details: "Paused",
+      startTimestamp: songStartedTime,
+      largeImageKey: 'logo',
+      smallImageKey: 'kyza',
+      largeImageText: "bit.ly/DesktopYTMusic",
+      smallImageText: "@Kyza#9994"
+    });
+  } else {
+    client.updatePresence({
+      state: "Listening to silence",
+      details: "Paused",
+      startTimestamp: songStartedTime,
+      largeImageKey: 'logo',
+      smallImageKey: 'kyza',
+      largeImageText: "bit.ly/DesktopYTMusic",
+      smallImageText: "@Kyza#9994"
+    });
+  }
 }
 
 // Keep a global reference of the window object, if you don"t, the window will
@@ -137,11 +137,9 @@ function createWindow() {
   // win.webContents.openDevTools();
 
   win.on("close", function(event) {
-    if (!isQuiting) {
-      event.preventDefault();
-      hideWindow();
-      event.returnValue = false;
-    }
+    event.preventDefault();
+    hideWindow();
+    event.returnValue = false;
   });
 }
 
@@ -155,10 +153,7 @@ function hiddenContextMenu() {
     {
       label: "Quit",
       click: function() {
-        isQuiting = true;
-        tray.destroy();
-				client.disconnect();
-        app.quit();
+        quitApp();
       }
     }
   ]);
@@ -169,10 +164,7 @@ function shownContextMenu() {
   trayMenu = Menu.buildFromTemplate([{
     label: "Quit",
     click: function() {
-      isQuiting = true;
-      tray.destroy();
-			client.disconnect();
-      app.quit();
+      quitApp();
     }
   }]);
   tray.setContextMenu(trayMenu);
@@ -188,6 +180,11 @@ function hideWindow() {
   hiddenContextMenu();
 }
 
+function quitApp() {
+  client.disconnect();
+  app.exit(0);
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -195,16 +192,6 @@ app.on("ready", createWindow);
 
 app.on("before-quit", function() {
   isQuiting = true;
-});
-
-// Quit when all windows are closed.
-app.on("window-all-closed", () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") {
-    tray.destroy();
-    app.quit();
-  }
 });
 
 app.on("activate", () => {
