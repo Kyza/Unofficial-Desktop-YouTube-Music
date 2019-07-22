@@ -1,0 +1,10 @@
+directories:
+  output: dist
+  buildResources: build
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - ia32
+electronVersion: 5.0.7

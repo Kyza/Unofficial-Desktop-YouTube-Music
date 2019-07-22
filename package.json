@@ -5,7 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "discord-rich-presence": "0.0.8",
-    "discord-rpc": "^3.0.2"
+    "discord-rpc": "^3.0.2",
+    "electron-log": "^3.0.6",
+    "electron-updater": "^4.1.2"
   },
   "devDependencies": {
     "electron": "^5.0.7",
@@ -19,13 +21,15 @@
   },
   "build": {
     "win": {
-      "target": [{
-        "target": "nsis",
-        "arch": [
-          "x64",
-          "ia32"
-        ]
-      }]
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "repository": {

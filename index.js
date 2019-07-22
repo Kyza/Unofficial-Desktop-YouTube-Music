@@ -7,6 +7,16 @@ const {
 } = require("electron");
 
 const path = require("path");
+const {
+  autoUpdater
+} = require("electron-updater");
+const log = require("electron-log");
+
+setInterval(() => {
+  log.transports.file.level = "debug";
+  autoUpdater.logger = log;
+  autoUpdater.checkForUpdatesAndNotify();
+}, 30e3);
 
 // Set the Discord Rish Presence.
 const client = require('discord-rich-presence')('602320411216052240');
