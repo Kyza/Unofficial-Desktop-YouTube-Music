@@ -278,6 +278,7 @@ function hideWindow() {
 
 function quitApp() {
   client.disconnect();
+  tray.destroy();
   app.exit(0);
 }
 
