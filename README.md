@@ -18,7 +18,8 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
   - [ ] Pause, play, skip, and go back to the previous song using the Windows thumbbar buttons.
   - [ ] Windows music integration.
   - [ ] Optional open on startup that defaults to off.
-- [ ] Jump to songs from a link.
+- [x] Paste song links to jump to them.
+  - [x] Works with most YouTube links, even incomplete/invalid ones.
 - [x] Automatic updates.
 - [ ] Song downloader.
 

@@ -5,14 +5,108 @@
 	<webview src="https://music.youtube.com/" httpreferrer="https://music.youtube.com/" preload="./preload.js" nodeintegration disablewebsecurity allowpopups></webview>
 	<script>
 		const {
-			ipcRenderer
+			ipcRenderer,
+			clipboard
 		} = require('electron');
 
 		const webview = document.querySelector("webview");
 		const loadingText = document.querySelector("#loading-text");
 
+		var keymap = {};
+
+		webview.addEventListener("ipc-message", function(e) {
+			if (e.channel === "key-data") {
+				keymap = e.args[0];
+			}
+		});
+
+		setInterval(() => {
+			if (testKeys("ctrl", "v")) {
+				keymap = {};
+				pasteLink();
+			}
+		}, 100);
+
+		function testKey(key) {
+			var aliases = {
+				"ctrl": 17,
+				"v": 86
+			};
+
+			return keymap[key] || keymap[aliases[key]];
+		}
+
+		function testKeys() {
+			var keylist = arguments;
+
+			for (var i = 0; i < keylist.length; i++)
+				if (!testKey(keylist[i]))
+					return false;
+
+			return true;
+		}
+
+		function pasteLink() {
+			// Parse the YouTube link and handle how to navigate to it.
+			var clipboardText = clipboard.readText("clipboard");
+
+			// Save the original clipboard text.
+			var originalClipboardText = clipboardText;
+
+			// Check if the link is a normal YouTube link.
+			var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+			var match1 = clipboardText.match(regExp);
+
+			// Attempt to change the link into a YouTube Music link.
+			clipboardText = clipboardText.replace("http://", "https://").replace("youtu.be", "youtube.com").replace("youtube.com", "music.youtube.com").replace("www.", "");
+
+			// Make sure that the link has "watch?v=" at the end of it.
+			if (clipboardText.indexOf("music.youtube.com/watch?v=") < 0) {
+				clipboardText = clipboardText.replace("music.youtube.com/", "music.youtube.com/watch?v=");
+			}
+
+			// Run a second match on the YouTube link to make sure it is correct.
+			regExp = /.*(?:https:\/\/music.youtube.com\/watch\?v=)([^#\&\?]*).*/;
+			var tmpMatch = clipboardText.match(regExp);
+			var match2 = tmpMatch && tmpMatch[1].length == 11;
+
+			console.warn("Possible link: " + originalClipboardText + "\n\n" + "Possibly formatted link: " + clipboardText);
+
+			if (originalClipboardText.indexOf("https://music.youtube.com") == 0) {
+				// It's a YouTube Music link.
+				// It was right all along.
+
+				console.warn("Easy YouTube Music link.");
+				webview.src = clipboardText;
+			} else if (match1 && match2) {
+				// It wasn't a YouTube Music link, but it was turned into one.
+				// So it uses the now morphed link with all of the extra YouTube URL attributes.
+
+				console.warn("Harder YouTube link.");
+				webview.src = clipboardText;
+			} else if (youtubeID(clipboardText)) {
+				// It isn't a YouTube Music link, and it couldn't be turned into one.
+				// It has a YouTube ID in it, so it uses that.
+
+				console.warn("Hardest YouTube link.");
+				webview.src = "https://music.youtube.com/watch?v=" + youtubeID(clipboardText);
+			}
+		}
+
+		function youtubeID(url) {
+			var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+			var match = url.match(regExp);
+			return (match && match[1].length == 11) ? match[1] : false;
+		}
+
+		// Handle loading animations.
+
 		webview.addEventListener("dom-ready", () => {
 			// webview.openDevTools();
+		});
+		// Mirror all console messages to the main page's console.
+		webview.addEventListener('console-message', (e) => {
+			console.log("Webview:\n" + e.message);
 		});
 
 		var firstLoad = true;
@@ -20,7 +114,7 @@
 		const loadStart = () => {
 			if (firstLoad) {
 				firstLoad = false;
-				
+
 				webview.setAttribute("style", "z-index: 2; display: inline-flex; width: 100%; height: 100%; opacity: 0;");
 				loadingText.setAttribute("style", "z-index: 0;z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;");
 			} else {

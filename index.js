@@ -7,6 +7,8 @@ const {
   ipcMain
 } = require("electron");
 
+var opn = require('opn');
+
 const {
   exec
 } = require('child_process');
@@ -39,6 +41,8 @@ function checkForUpdate() {
           if (response === 0) {
             win.close();
             tray.destroy();
+
+            opn("https://github.com/KyzaGitHub/Desktop-YouTube-Music/releases");
 
             downloadInstallNewVersion(body[0].id);
           }
@@ -220,7 +224,7 @@ function createWindow() {
   win.loadFile("./index.html");
 
   // Open the DevTools.
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.on("close", function(event) {
     event.preventDefault();
