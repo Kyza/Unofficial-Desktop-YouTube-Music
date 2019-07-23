@@ -9,12 +9,16 @@ const {
 
 var opn = require('opn');
 
+const homedir = require('os').homedir();
+
 const {
   exec
 } = require('child_process');
 
 const request = require("request");
 const rp = require("request-promise");
+
+const userDataPath = app.getPath("userData");
 
 const fs = require("fs");
 
@@ -31,6 +35,7 @@ function checkForUpdate() {
     try {
       var currentVersion = app.getVersion();
       var latestVersion = body[0].tag_name.replace("v", "");
+
       if (currentVersion != latestVersion) {
         var doInstall = dialog.showMessageBox(win, {
           "type": 'question',
@@ -66,14 +71,15 @@ function downloadInstallNewVersion(versionID) {
   }, function(error, response, body) {
     for (let i = 0; i < body.length; i++) {
       var fileName = "./" + body[i].browser_download_url.split("/")[body[i].browser_download_url.split("/").length - 1];
-      var filePath = __dirname + "/" + fileName.replace("./", "");
+
+      var filePath = homedir + "/" + fileName.replace("./", "");
 
       var stream = request({
         url: body[i].browser_download_url,
         headers: {
           "User-Agent": "Awesome-Octocat-App"
         }
-      }).pipe(fs.createWriteStream(fileName));
+      }).pipe(fs.createWriteStream(filePath));
 
       stream.on('finish', function() {
         exec(filePath, (err, stdout, stderr) => {
@@ -224,7 +230,7 @@ function createWindow() {
   win.loadFile("./index.html");
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   win.on("close", function(event) {
     event.preventDefault();
@@ -279,6 +285,10 @@ function quitApp() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", createWindow);
+
+app.on("error", () => {
+  quitApp();
+});
 
 app.on("before-quit", function() {
   isQuiting = true;
