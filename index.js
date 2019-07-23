@@ -230,7 +230,7 @@ function createWindow() {
   win.loadFile("./index.html");
 
   // Open the DevTools.
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.on("close", function(event) {
     event.preventDefault();

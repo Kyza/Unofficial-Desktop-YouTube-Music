@@ -50,6 +50,8 @@
 			// Parse the YouTube link and handle how to navigate to it.
 			var clipboardText = clipboard.readText("clipboard");
 
+			console.log(clipboardText);
+
 			// Save the original clipboard text.
 			var originalClipboardText = clipboardText;
 
@@ -77,7 +79,7 @@
 				// It was right all along.
 
 				console.warn("Easy YouTube Music link.");
-				webview.src = clipboardText;
+				webview.src = originalClipboardText;
 			} else if (match1 && match2) {
 				// It wasn't a YouTube Music link, but it was turned into one.
 				// So it uses the now morphed link with all of the extra YouTube URL attributes.
@@ -90,6 +92,8 @@
 
 				console.warn("Hardest YouTube link.");
 				webview.src = "https://music.youtube.com/watch?v=" + youtubeID(clipboardText);
+			} else {
+				console.error("No link found.");
 			}
 		}
 
