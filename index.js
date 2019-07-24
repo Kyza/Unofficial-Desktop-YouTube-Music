@@ -147,7 +147,7 @@ function downloadInstallNewVersion(versionID) {
             progressWin.close();
 
             // Try opening the file 4 times over 10 seconds.
-            // If it can't the error is most likely not a locked file.
+            // If it can't, then the error is most likely not a locked file.
             openFile(filePath, 2500, 4);
           }, 5000);
         });
