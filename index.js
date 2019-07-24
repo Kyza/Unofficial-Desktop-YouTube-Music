@@ -169,6 +169,9 @@ function openFile(filePath, delay, tries, currentTry) {
         dialog.showMessageBox({
           'message': `${err}`
         });
+        setTimeout(() => {
+          app.exit(0);
+        }, 5000);
       }
     } else {
       // Once finished, close the current app.
