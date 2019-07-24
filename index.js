@@ -380,6 +380,15 @@ app.on("ready", () => {
     }
   });
 
+  globalShortcut.register("MediaPreviousTrack", () => {
+  });
+  globalShortcut.register("MediaPlayPause", () => {
+  });
+  globalShortcut.register("MediaStop", () => {
+  });
+  globalShortcut.register("MediaNextTrack", () => {
+  });
+
 
   win.on("focus", (e) => {
     globalShortcut.register('CommandOrControl+Shift+I', () => {
