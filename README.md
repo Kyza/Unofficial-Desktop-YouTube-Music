@@ -41,6 +41,6 @@ It's easy! Just go to [releases](https://github.com/KyzaGitHub/Desktop-YouTube-M
 
 # Disclaimers
 
-- Neither YouTube or YouTube Music, nor any media on or related to YouTube or YouTube Music is owned by me.
-- I am not affiliated with, nor am I an employee or part of YouTube or YouTube Music.
-- This program is unofficial, and is not endorsed or recognized by YouTube or YouTube Music.
+- Nither Google, nor YouTube or YouTube Music, nor any media on or related to Google, YouTube, or YouTube Music is owned by me.
+- I am not affiliated with, nor am I an employee or part of Google, YouTube or YouTube Music.
+- This program is unofficial, and is not endorsed or recognized by Google, nor YouTube or YouTube Music.
