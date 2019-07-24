@@ -23,6 +23,10 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 - [x] Automatic updates.
 - [ ] Song downloader.
 
+# Known Bugs
+
+- Rarely, the installer fails to open because it is still locked by the downloader.
+
 # Images
 
 <img src="https://i.vgy.me/kQVHwG.png" />
