@@ -43,6 +43,10 @@ It's easy! Just go to [releases](https://github.com/KyzaGitHub/Desktop-YouTube-M
 
 <img src="https://i.vgy.me/lqzdCn.png" />
 
+# Credits
+
+Toolbar icons are owned by [Flaticon](https://www.flaticon.com/).
+
 # Disclaimers
 
 - Niether Google, nor YouTube or YouTube Music, nor any media on or related to Google, YouTube, or YouTube Music is owned by me.
