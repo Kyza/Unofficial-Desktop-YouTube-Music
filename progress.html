@@ -1,0 +1,35 @@
+<body>
+  <div id="progressbar">
+    <div></div>
+  </div>
+
+  <style>
+    body {
+      margin: 0px !important;
+      background-color: transparent;
+    }
+
+    #progressbar {
+      background-color: black;
+      border-radius: 13px;
+      /* (height of inner div) / 2 + padding */
+      padding: 3px;
+      width: calc(100% - 6px);
+    }
+
+    #progressbar > div {
+      background-color: red;
+      width: 0%;
+      /* Adjust with JavaScript */
+      height: calc(100% - 6px);
+      border-radius: 10px;
+
+      transition-duration: 0.5s;
+    }
+  </style>
+  <script>
+    function updateProgress(progressData) {
+      document.querySelector("#progressbar > div").style.width = Math.ceil(progressData.percent * 100) + "%";
+    }
+  </script>
+</body>

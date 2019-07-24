@@ -17,7 +17,7 @@ const {
 } = require('child_process');
 
 const request = require("request");
-const rp = require("request-promise");
+const progress = require('request-progress');
 
 const userDataPath = app.getPath("userData");
 
@@ -78,29 +78,92 @@ function downloadInstallNewVersion(versionID) {
 
       var filePath = homedir + "/" + fileName.replace("./", "");
 
-      var stream = request({
-        url: body[i].browser_download_url,
-        headers: {
-          "User-Agent": "Awesome-Octocat-App"
-        }
-      }).pipe(fs.createWriteStream(filePath));
 
-      stream.on('finish', function() {
-        exec(filePath, (err, stdout, stderr) => {
-          if (err) {
-            //some err occurred
-            dialog.showMessageBox({
-              'message': `${err}`
-            });
-          } else {
-            // Once finished, close the current app.
-            app.exit(0);
-          }
-        });
+      var progressWin = new BrowserWindow({
+        width: 800,
+        height: 20,
+        webPreferences: {
+          nodeIntegration: true,
+          webviewTag: true
+        },
+        title: "Downloading",
+        icon: __dirname + "/images/favicon.png",
+        frame: false,
+        transparent: true
       });
+      progressWin.setAlwaysOnTop(true);
+      progressWin.setIgnoreMouseEvents(true)
+      progressWin.loadFile("./progress.html");
+      progressWin.setMenu(null);
+
+      var stream = progress(request({
+          url: body[i].browser_download_url,
+          headers: {
+            "User-Agent": "Awesome-Octocat-App"
+          }
+        }), {
+          throttle: 100,
+          delay: 0
+        })
+        .on('progress', function(state) {
+          // The state is an object that looks like this:
+          // {
+          //     percent: 0.5,               // Overall percent (between 0 to 1)
+          //     speed: 554732,              // The download speed in bytes/sec
+          //     size: {
+          //         total: 90044871,        // The total payload size in bytes
+          //         transferred: 27610959   // The transferred payload size in bytes
+          //     },
+          //     time: {
+          //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
+          //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
+          //     }
+          // }
+          progressWin.webContents.executeJavaScript(`
+            updateProgress(` + JSON.stringify(state) + `);
+          `);
+        })
+        .on('error', function(err) {
+          dialog.showMessageBox({
+            'message': `${err}`
+          });
+        })
+        .on('end', function() {
+          // Make sure the stream is closed so the file is accessable.
+          stream.close();
+
+          progressWin.webContents.executeJavaScript(`
+            updateProgress(` + JSON.stringify({
+            percent: 1
+          }) + `);
+          `);
+
+          // Wait five seconds before attempting to install.
+          // This should reduce the amount of installation failures until I find a better solution.
+          setTimeout(() => {
+            progressWin.close();
+
+            exec(filePath, (err, stdout, stderr) => {
+              if (err) {
+                //some err occurred
+                dialog.showMessageBox({
+                  'message': `${err}`
+                });
+              } else {
+                // Once finished, close the current app.
+                app.exit(0);
+              }
+            });
+          }, 5000);
+        })
+        .pipe(fs.createWriteStream(filePath));
     }
   });
 }
+
+
+
+
 
 // Set the Discord Rish Presence.
 const client = require('discord-rich-presence')('602320411216052240');
