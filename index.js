@@ -146,24 +146,36 @@ function downloadInstallNewVersion(versionID) {
           setTimeout(() => {
             progressWin.close();
 
-            exec(filePath, (err, stdout, stderr) => {
-              if (err) {
-                //some err occurred
-                dialog.showMessageBox({
-                  'message': `${err}`
-                });
-              } else {
-                // Once finished, close the current app.
-                app.exit(0);
-              }
-            });
+            // Try opening the file 4 times over 10 seconds.
+            // If it can't the error is most likely not a locked file.
+            openFile(filePath, 2500, 4);
           }, 5000);
         });
     }
   });
 }
 
+function openFile(filePath, delay, tries, currentTry) {
+  if (!currentTry) currentTry = 0;
 
+  exec(filePath, (err, stdout, stderr) => {
+    if (err) {
+      //some err occurred
+      if (currentTry < tries) {
+        setTimeout(() => {
+          openFile(filePath, delay, tries, currentTry + 1);
+        }, delay);
+      } else {
+        dialog.showMessageBox({
+          'message': `${err}`
+        });
+      }
+    } else {
+      // Once finished, close the current app.
+      app.exit(0);
+    }
+  });
+}
 
 
 
