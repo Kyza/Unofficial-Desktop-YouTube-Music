@@ -20,7 +20,7 @@ body {
 
 #toolbar.toolbar-closed {
   height: 10px;
-  background-color: red;
+  background-color: rgba(255, 255, 255, 0.2);
   transition-duration: 0.5s;
 }
 
@@ -28,8 +28,8 @@ body {
   height: 50px;
   background-color: black;
   transition-duration: 0.5s;
-
 }
+
 #toolbar.toolbar-closed>.toolbar-button {
   opacity: 0;
   height: 4px !important;
@@ -44,16 +44,30 @@ body {
 
 .toolbar-button {
   display: inline-block;
-  min-width: 34px;
-  height: 34px;
-  margin: 3px;
-  padding: 5px;
-  border-radius: 10px;
-  background-color: rgba(255, 0, 0, 0.5);
-  line-height: 34px;
+  min-width: 50px;
+  height: 50px;
+  line-height: 50px;
   text-align: center;
+  background-position: center;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  filter: invert(100%);
+  transition-duration: 1s;
 }
 
 .toolbar-button:hover {
-  background-color: rgba(255, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#back-button {
+  background-image: url("https://image.flaticon.com/icons/svg/126/126492.svg");
+}
+
+#reload-button {
+  background-image: url("https://image.flaticon.com/icons/svg/109/109450.svg");
+}
+
+#forward-button {
+  background-image: url("https://image.flaticon.com/icons/svg/126/126492.svg");
+  transform: rotateY(180deg);
 }

@@ -10,10 +10,12 @@
 	<link rel="stylesheet" type="text/css" href="./index.css">
 
 	<div id="toolbar">
-		<div class="toolbar-button">Button</div>
+		<div id="back-button" class="toolbar-button"></div>
+		<div id="reload-button" class="toolbar-button"></div>
+		<div id="forward-button" class="toolbar-button"></div>
 	</div>
 
-	<div id="loading-text">
+	<div id="loading-text" style="z-index: 0; z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;">
 		Loading...
 	</div>
 
@@ -29,6 +31,19 @@
 		const loadingText = $("#loading-text");
 		const toolbar = $("#toolbar");
 
+		// Set up the toolbar buttons.
+		var backButton = $("#back-button");
+		backButton.on("click", () => {
+			window.history.back();
+		});
+		var reloadButton = $("#reload-button");
+		reloadButton.on("click", () => {
+			window.location.reload();
+		});
+		var forwardButton = $("#forward-button");
+		forwardButton.on("click", () => {
+			window.history.forward();
+		});
 
 		// Change the height of the webview when the toolbar is hovered.
 		closeToolbar();
