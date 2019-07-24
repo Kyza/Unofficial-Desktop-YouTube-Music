@@ -6,46 +6,11 @@
 	<script>
 		const {
 			ipcRenderer,
-			clipboard
+			clipboard,
+			remote
 		} = require('electron');
 
-		const webview = document.querySelector("webview");
-		const loadingText = document.querySelector("#loading-text");
-
-		var keymap = {};
-
-		webview.addEventListener("ipc-message", function(e) {
-			if (e.channel === "key-data") {
-				keymap = e.args[0];
-			}
-		});
-
-		setInterval(() => {
-			if (testKeys("ctrl", "v")) {
-				keymap = {};
-				pasteLink();
-			}
-		}, 100);
-
-		function testKey(key) {
-			var aliases = {
-				"ctrl": 17,
-				"v": 86
-			};
-
-			return keymap[key] || keymap[aliases[key]];
-		}
-
-		function testKeys() {
-			var keylist = arguments;
-
-			for (var i = 0; i < keylist.length; i++)
-				if (!testKey(keylist[i]))
-					return false;
-
-			return true;
-		}
-
+		// Add the link handling for the main process to use.
 		function pasteLink() {
 			// Parse the YouTube link and handle how to navigate to it.
 			var clipboardText = clipboard.readText("clipboard");
@@ -103,11 +68,14 @@
 			return (match && match[1].length == 11) ? match[1] : false;
 		}
 
-		// Handle loading animations.
 
-		webview.addEventListener("dom-ready", () => {
-			// webview.openDevTools();
-		});
+
+		const webview = document.querySelector("webview");
+		const loadingText = document.querySelector("#loading-text");
+
+
+		// Handle loading animations.
+		webview.addEventListener("dom-ready", () => {});
 		// Mirror all console messages to the main page's console.
 		webview.addEventListener('console-message', (e) => {
 			console.log("Webview:\n" + e.message);

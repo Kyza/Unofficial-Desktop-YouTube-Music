@@ -4,7 +4,8 @@ const {
   Tray,
   Menu,
   dialog,
-  ipcMain
+  ipcMain,
+  globalShortcut
 } = require("electron");
 
 var opn = require('opn');
@@ -24,6 +25,8 @@ const fs = require("fs");
 
 const path = require("path");
 
+var askedToUpdate = false;
+
 function checkForUpdate() {
   request({
     url: "http://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases",
@@ -37,6 +40,7 @@ function checkForUpdate() {
       var latestVersion = body[0].tag_name.replace("v", "");
 
       if (currentVersion != latestVersion) {
+        askedToUpdate = true;
         var doInstall = dialog.showMessageBox(win, {
           "type": 'question',
           "buttons": ['Yes', 'No'],
@@ -169,8 +173,11 @@ let trayMenu;
 
 function createWindow() {
   checkForUpdate();
-  setInterval(() => {
+  var updateInterval = setInterval(() => {
     checkForUpdate();
+    if (askedToUpdate) {
+      clearInterval(updateInterval);
+    }
   }, 30e3 * 60); // Check for updates every 30 minutes.
 
 
@@ -229,9 +236,6 @@ function createWindow() {
   // and load the index.html of the app.
   win.loadFile("./index.html");
 
-  // Open the DevTools.
-  win.webContents.openDevTools();
-
   win.on("close", function(event) {
     event.preventDefault();
     hideWindow();
@@ -285,7 +289,38 @@ function quitApp() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  createWindow();
+  globalShortcut.register('CommandOrControl+Shift+I', () => {
+    toggleDevTools();
+  });
+  globalShortcut.register('CommandOrControl+Shift+Y', () => {
+    if (win.isVisible()) {
+      hideWindow();
+    } else {
+      showWindow();
+    }
+  });
+  // Detect link pasting and send it to the window.
+  globalShortcut.register('CommandOrControl+V', () => {
+    if (win.isFocused()) {
+      win.webContents.executeJavaScript(`
+        pasteLink();
+      `);
+    }
+  });
+});
+
+var devToolsOpen = false;
+
+function toggleDevTools() {
+  if (devToolsOpen && win.isFocused()) {
+    win.webContents.closeDevTools();
+  } else if (win.isFocused()) {
+    win.webContents.openDevTools();
+  }
+  devToolsOpen = !devToolsOpen;
+}
 
 app.on("error", () => {
   quitApp();

@@ -1,5 +1,7 @@
 const {
-  ipcRenderer
+  ipcRenderer,
+  clipboard,
+  remote
 } = require('electron');
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -18,23 +20,4 @@ function sendPageData() {
   };
 
   ipcRenderer.sendToHost("window-data", data);
-}
-
-// Handle and send all of the keys being pressed.
-// Set up the link pasting keybind.
-
-// Find out which keys are pressed.
-var keymap = {};
-
-document.addEventListener("keydown", (e) => {
-  updateKeys(e);
-});
-document.addEventListener("keyup", (e) => {
-  updateKeys(e);
-});
-
-function updateKeys(e) {
-  keymap[e.keyCode] = e.type == 'keydown';
-
-  ipcRenderer.sendToHost("key-data", keymap);
 }
