@@ -59,7 +59,7 @@ function checkForUpdate() {
       }
     } catch (e) {
       dialog.showMessageBox({
-        'message': JSON.stringify(body)
+        'message': "It looks like GitHub is ratelimiting you.\nYou will have to wait a while to be able to update.\n\nThis is caused by opening and closing the program many times in a short period of time."
       });
     }
   });
