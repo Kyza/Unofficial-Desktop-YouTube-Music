@@ -129,6 +129,9 @@ function downloadInstallNewVersion(versionID) {
           });
         })
         .on('end', function() {
+
+        })
+        .pipe(fs.createWriteStream(filePath)).on("finish", () => {
           // Make sure the stream is closed so the file is accessable.
           stream.close();
 
@@ -155,8 +158,7 @@ function downloadInstallNewVersion(versionID) {
               }
             });
           }, 5000);
-        })
-        .pipe(fs.createWriteStream(filePath));
+        });
     }
   });
 }
