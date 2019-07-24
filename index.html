@@ -1,14 +1,59 @@
+<head>
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+	<script>if (window.module) module = window.module;</script>
+</head>
+
 <body style="margin: 0px !important; background-color: black; color: white;">
+	<link rel="stylesheet" type="text/css" href="./index.css">
+
+	<div id="toolbar">
+		<div class="toolbar-button">Button</div>
+	</div>
+
 	<div id="loading-text">
 		Loading...
 	</div>
-	<webview src="https://music.youtube.com/" httpreferrer="https://music.youtube.com/" preload="./preload.js" nodeintegration disablewebsecurity allowpopups></webview>
+
+	<webview id="webview" src="https://music.youtube.com/" httpreferrer="https://music.youtube.com/" preload="./preload.js" nodeintegration disablewebsecurity allowpopups></webview>
 	<script>
 		const {
 			ipcRenderer,
 			clipboard,
 			remote
 		} = require('electron');
+
+		const webview = $("webview");
+		const loadingText = $("#loading-text");
+		const toolbar = $("#toolbar");
+
+
+		// Change the height of the webview when the toolbar is hovered.
+		closeToolbar();
+		toolbar.on("mouseover", () => {
+			openToolbar();
+		});
+		toolbar.on("mouseout", () => {
+			closeToolbar();
+		});
+
+		function openToolbar() {
+			toolbar.removeClass("toolbar-closed");
+			toolbar.addClass("toolbar-open");
+
+			webview.removeClass("toolbar-closed");
+			webview.addClass("toolbar-open");
+		}
+		function closeToolbar() {
+			toolbar.removeClass("toolbar-open");
+			toolbar.addClass("toolbar-closed");
+
+			webview.removeClass("toolbar-open");
+			webview.addClass("toolbar-closed");
+		}
+
 
 		// Add the link handling for the main process to use.
 		function pasteLink() {
@@ -44,19 +89,19 @@
 				// It was right all along.
 
 				console.warn("Easy YouTube Music link.");
-				webview.src = originalClipboardText;
+				webview.attr("src", originalClipboardText);
 			} else if (match1 && match2) {
 				// It wasn't a YouTube Music link, but it was turned into one.
 				// So it uses the now morphed link with all of the extra YouTube URL attributes.
 
 				console.warn("Harder YouTube link.");
-				webview.src = clipboardText;
+				webview.attr("src", clipboardText);
 			} else if (youtubeID(clipboardText)) {
 				// It isn't a YouTube Music link, and it couldn't be turned into one.
 				// It has a YouTube ID in it, so it uses that.
 
 				console.warn("Hardest YouTube link.");
-				webview.src = "https://music.youtube.com/watch?v=" + youtubeID(clipboardText);
+				webview.attr("src", "https://music.youtube.com/watch?v=" + youtubeID(clipboardText));
 			} else {
 				console.error("No link found.");
 			}
@@ -70,14 +115,11 @@
 
 
 
-		const webview = document.querySelector("webview");
-		const loadingText = document.querySelector("#loading-text");
-
 
 		// Handle loading animations.
-		webview.addEventListener("dom-ready", () => {});
+		webview.on("dom-ready", () => {});
 		// Mirror all console messages to the main page's console.
-		webview.addEventListener('console-message', (e) => {
+		webview.on('console-message', (e) => {
 			console.log("Webview:\n" + e.message);
 		});
 
@@ -87,42 +129,42 @@
 			if (firstLoad) {
 				firstLoad = false;
 
-				webview.setAttribute("style", "z-index: 2; display: inline-flex; width: 100%; height: 100%; opacity: 0;");
-				loadingText.setAttribute("style", "z-index: 0;z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;");
+				webview.attr("style", "opacity: 0;");
+				loadingText.attr("style", "z-index: 0; z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;");
 			} else {
-				webview.setAttribute("style", "z-index: 2; display: inline-flex; width: 100%; height: 100%; transition-duration: 1s; opacity: 1;");
-				loadingText.setAttribute("style", "z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); transition-duration: 1s; opacity: 0;");
+				webview.attr("style", "transition-duration: 1s; opacity: 1;");
+				loadingText.attr("style", "z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); transition-duration: 1s; opacity: 0;");
 				setTimeout(() => {
-					webview.setAttribute("style", "z-index: 2; display: inline-flex; width: 100%; height: 100%; transition-duration: 1s; opacity: 0;");
-					loadingText.setAttribute("style", "z-index: 0; transition-duration: 1s;z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;");
+					webview.attr("style", "transition-duration: 1s; opacity: 0;");
+					loadingText.attr("style", "z-index: 0; transition-duration: 1s;z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;");
 				}, 100);
 			}
 		}
 
 		const loadStop = () => {
-			webview.setAttribute("style", "z-index: 2; display: inline-flex; width: 100%; height: 100%; transition-duration: 1s; opacity: 0;");
-			loadingText.setAttribute("style", "z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); transition-duration: 1s; opacity: 1;");
+			webview.attr("style", "transition-duration: 1s; opacity: 0;");
+			loadingText.attr("style", "z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); transition-duration: 1s; opacity: 1;");
 			setTimeout(() => {
-				webview.setAttribute("style", "z-index: 2; display: inline-flex; width: 100%; height: 100%; transition-duration: 1s; opacity: 1;");
-				loadingText.setAttribute("style", "z-index: 0; transition-duration: 1s;z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 0;");
+				webview.attr("style", "transition-duration: 1s; opacity: 1;");
+				loadingText.attr("style", "z-index: 0; transition-duration: 1s;z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 0;");
 			}, 100);
 		}
 
-		webview.addEventListener("did-start-loading", loadStart);
-		webview.addEventListener("did-stop-loading", loadStop);
+		webview.on("did-start-loading", loadStart);
+		webview.on("did-stop-loading", loadStop);
 
 
-		webview.addEventListener("ipc-message", function(e) {
+		webview.on("ipc-message", function(e) {
 			if (e.channel === "window-data") {
-				var webviewDOM = document.createElement("html");
-				webviewDOM.innerHTML = e.args[0].html;
+				var webviewDOM = $(document.createElement("html"));
+				webviewDOM.html(e.args[0].html);
 
-				var selectedElement = webviewDOM.querySelector(".title.ytmusic-player-bar");
+				var selectedElement = webviewDOM[0].querySelector(".title.ytmusic-player-bar");
 				if (selectedElement) {
 					songName = selectedElement.textContent;
 				}
 
-				selectedElement = webviewDOM.querySelector(".byline.ytmusic-player-bar");
+				selectedElement = webviewDOM[0].querySelector(".byline.ytmusic-player-bar");
 				if (selectedElement) {
 					if (selectedElement.textContent != "Video will play after ad") {
 						songAuthor = selectedElement.textContent;
@@ -130,7 +172,7 @@
 				}
 
 				//time-info style-scope ytmusic-player-bar
-				selectedElement = webviewDOM.querySelector(".time-info.ytmusic-player-bar");
+				selectedElement = webviewDOM[0].querySelector(".time-info.ytmusic-player-bar");
 				if (selectedElement) {
 					var currentTime = selectedElement.textContent.split("/")[0].trim();
 					var totalTime = selectedElement.textContent.split("/")[1].trim();

@@ -1,0 +1,59 @@
+body {
+  overflow-y: hidden;
+}
+
+#webview.toolbar-closed {
+  z-index: 2;
+  display: inline-flex;
+  width: 100%;
+  height: calc(100% - 10px);
+  transition-duration: 0.5s;
+}
+
+#webview.toolbar-open {
+  z-index: 2;
+  display: inline-flex;
+  width: 100%;
+  height: calc(100% - 50px);
+  transition-duration: 0.5s;
+}
+
+#toolbar.toolbar-closed {
+  height: 10px;
+  background-color: red;
+  transition-duration: 0.5s;
+}
+
+#toolbar.toolbar-open {
+  height: 50px;
+  background-color: black;
+  transition-duration: 0.5s;
+
+}
+#toolbar.toolbar-closed>.toolbar-button {
+  opacity: 0;
+  height: 4px !important;
+  line-height: 10px;
+  transition-duration: 0.5s;
+}
+
+#toolbar.toolbar-open>.toolbar-button {
+  opacity: 1;
+  transition-duration: 0.5s;
+}
+
+.toolbar-button {
+  display: inline-block;
+  min-width: 34px;
+  height: 34px;
+  margin: 3px;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: rgba(255, 0, 0, 0.5);
+  line-height: 34px;
+  text-align: center;
+}
+
+.toolbar-button:hover {
+  background-color: rgba(255, 0, 0, 0.7);
+}

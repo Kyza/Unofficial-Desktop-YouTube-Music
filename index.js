@@ -371,9 +371,7 @@ function quitApp() {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow();
-  globalShortcut.register('CommandOrControl+Shift+I', () => {
-    toggleDevTools();
-  });
+
   globalShortcut.register('CommandOrControl+Shift+Y', () => {
     if (win.isVisible()) {
       hideWindow();
@@ -381,15 +379,28 @@ app.on("ready", () => {
       showWindow();
     }
   });
-  // Detect link pasting and send it to the window.
-  globalShortcut.register('CommandOrControl+V', () => {
-    if (win.isFocused()) {
-      win.webContents.executeJavaScript(`
-        pasteLink();
-      `);
-    }
+
+
+  win.on("focus", (e) => {
+    globalShortcut.register('CommandOrControl+Shift+I', () => {
+      toggleDevTools();
+    });
+    // Detect link pasting and send it to the window.
+    globalShortcut.register('CommandOrControl+V', () => {
+      if (win.isFocused()) {
+        win.webContents.executeJavaScript(`
+          pasteLink();
+        `);
+      }
+    });
+  });
+
+  win.on("blur", (e) => {
+    globalShortcut.unregister("CommandOrControl+Shift+I");
+    globalShortcut.unregister("CommandOrControl+V");
   });
 });
+
 
 var devToolsOpen = false;
 
