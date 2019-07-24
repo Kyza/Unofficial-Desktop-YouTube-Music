@@ -86,7 +86,7 @@ function downloadInstallNewVersion(versionID) {
           nodeIntegration: true,
           webviewTag: true
         },
-        title: "Downloading",
+        title: "Downloading Installer",
         icon: __dirname + "/images/favicon.png",
         frame: false,
         transparent: true
