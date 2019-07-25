@@ -21,7 +21,7 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 - [x] Paste song links to jump to them.
   - [x] Works with most YouTube links, even incomplete/invalid ones.
 - [x] Automatic updates.
-- [x] Easy togglable always on top button.
+- [x] Togglable always on top button.
 - [ ] Song downloader.
 
 # Known Bugs
