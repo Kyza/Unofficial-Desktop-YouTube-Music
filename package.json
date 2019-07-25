@@ -1,6 +1,6 @@
 {
   "name": "DesktopYouTubeMusic",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Ever wanted to use YouTube Music but with the functionality of a desktop app like Spotify?",
   "main": "index.js",
   "dependencies": {

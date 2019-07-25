@@ -20,6 +20,7 @@ body {
 
 #toolbar {
   padding: 0px;
+  user-select: none;
 }
 
 #toolbar.toolbar-closed {
@@ -86,4 +87,8 @@ body {
 #not-on-top-button {
   background-image: url("https://image.flaticon.com/icons/svg/61/61845.svg"), url("https://image.flaticon.com/icons/svg/803/803294.svg");
   background-size: 30px, 40px;
+}
+
+#download-button {
+  background-image: url("https://image.flaticon.com/icons/svg/126/126488.svg");
 }

@@ -92,7 +92,7 @@ function downloadInstallNewVersion(versionID) {
         transparent: true
       });
       progressWin.setAlwaysOnTop(true);
-      progressWin.setIgnoreMouseEvents(true)
+      progressWin.setIgnoreMouseEvents(true);
       progressWin.loadFile("./progress.html");
       progressWin.setMenu(null);
       progressWin.center();
@@ -430,8 +430,14 @@ var devToolsOpen = false;
 function toggleDevTools() {
   if (devToolsOpen && win.isFocused()) {
     win.webContents.closeDevTools();
+    win.webContents.executeJavaScript(`
+      document.querySelector("#webview").closeDevTools();
+    `);
   } else if (win.isFocused()) {
     win.webContents.openDevTools();
+    win.webContents.executeJavaScript(`
+      document.querySelector("#webview").openDevTools();
+    `);
   }
   devToolsOpen = !devToolsOpen;
 }

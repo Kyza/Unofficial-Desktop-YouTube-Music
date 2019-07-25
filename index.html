@@ -1,4 +1,6 @@
 <head>
+	<title>YouTube Music</title>
+
 	<script>
 		if (typeof module === 'object') {
 			window.module = module;
@@ -16,16 +18,22 @@
 <body style="margin: 0px !important; background-color: black; color: white;">
 	<link rel="stylesheet" type="text/css" href="./index.css">
 
-	<div id="toolbar">
+	<div id="toolbar" style="z-index: 3;">
 		<div id="back-button" class="toolbar-button"></div>
 		<div id="reload-button" class="toolbar-button"></div>
 		<div id="forward-button" class="toolbar-button"></div>
 		<div id="not-on-top-button" class="toolbar-button"></div>
 		<div id="on-top-button" class="toolbar-button"></div>
+		<div id="download-button" class="toolbar-button"></div>
 	</div>
 
-	<div id="loading-text" style="z-index: 0; z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;">
+	<div id="loading-text" style="z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;">
 		Loading...
+	</div>
+
+	<div id="download-wrapper" style="z-index: 4; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+		<div id="download-inner" style="position: absolute; top: 50%; left: 50%; width: 50%; height: 50%; transform: translate(-50%, -50%); background-color: red;">
+		</div>
 	</div>
 
 	<webview id="webview" src="https://music.youtube.com/" httpreferrer="https://music.youtube.com/" preload="./preload.js" nodeintegration disablewebsecurity allowpopups></webview>
@@ -35,10 +43,18 @@
 			clipboard,
 			remote
 		} = require('electron');
+		const BrowserWindow = remote.BrowserWindow;
+		const dialog = remote.dialog;
+		const request = require("request");
+		const progress = require('request-progress');
+		const fs = require("fs");
 
 		const webview = $("#webview");
 		const loadingText = $("#loading-text");
 		const toolbar = $("#toolbar");
+		const downloadWrapper = $("#download-wrapper");
+		const downloadInner = $("#download-inner");
+		downloadWrapper.hide();
 
 		// Set up the toolbar buttons.
 		var backButton = $("#back-button");
@@ -73,6 +89,144 @@
 				notOnTopButton.css("display", "none");
 				onTopButton.css("display", "");
 			}
+		}
+
+		var progressWin;
+
+		// Handle downloading the song.
+		var downloadButton = $("#download-button");
+		downloadButton.on("click", () => {
+			var songID = youtubeID(webview[0].getURL());
+			if (songID) {
+				console.log("Downloading song: " + songID);
+
+				$.ajax({
+					type: 'POST',
+					url: "https://www.youtubeconverter.io/convert",
+					data: {
+						url: "https://www.youtube.com/watch?v=" + songID
+					},
+					json: true,
+					success: function(result) {
+						let resultHTML = result;
+
+						let regExp = /(?:_id:')(.*)(?:',)/;
+						let match = resultHTML.match(regExp);
+
+						dialog.showSaveDialog({
+							title: "Save Song",
+							filters: [{
+								name: 'MP4',
+								extensions: ["mp4"]
+							}],
+							defaultPath: "song.mp4"
+						}, (filename) => {
+							if (filename != undefined) {
+								progressWin = new BrowserWindow({
+									width: 800,
+									height: 20,
+									webPreferences: {
+										nodeIntegration: true,
+										webviewTag: true
+									},
+									title: "Downloading Song",
+									icon: __dirname + "/images/favicon.png",
+									frame: false,
+									transparent: true
+								});
+								progressWin.setAlwaysOnTop(true);
+								progressWin.setIgnoreMouseEvents(true);
+								progressWin.loadFile("./progress.html");
+								progressWin.setMenu(null);
+								progressWin.center();
+
+								downloadSong(match[1], songID, filename);
+							}
+						});
+					}
+				});
+			}
+		});
+
+		function downloadSong(authID, songID, filename) {
+			$.ajax({
+				type: 'POST',
+				url: "https://www.youtubeconverter.io/convert/index",
+				data: {
+					type: "youtube",
+					_id: authID,
+					v_id: songID,
+					ftype: "mp4",
+					fquality: "1080p",
+					ajax: "1"
+				},
+				json: true,
+				success: function(result) {
+					let resultHTML = result.result;
+
+					console.log(resultHTML);
+
+					let regExp = /(?:href=")(.*)(?:")/;
+					let match = resultHTML.match(regExp);
+
+					if (match == null) {
+						console.log("Trying again.");
+						setTimeout(() => {
+							downloadSong(authID, songID, filename);
+						}, 3e3);
+					} else {
+						let stream = progress(request({
+								url: match[1]
+							}), {
+								throttle: 100,
+								delay: 0
+							})
+							.on('progress', function(state) {
+								// The state is an object that looks like this:
+								// {
+								//     percent: 0.5,               // Overall percent (between 0 to 1)
+								//     speed: 554732,              // The download speed in bytes/sec
+								//     size: {
+								//         total: 90044871,        // The total payload size in bytes
+								//         transferred: 27610959   // The transferred payload size in bytes
+								//     },
+								//     time: {
+								//         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
+								//         remaining: 81.403       // The remaining seconds to finish (3 decimals)
+								//     }
+								// }
+
+								progressWin.webContents.executeJavaScript(`
+									updateProgress(` + JSON.stringify(state) + `);
+								`);
+							})
+							.on('error', function(err) {
+								dialog.showMessageBox({
+									'message': `${err}`
+								});
+							})
+							.on('end', function() {
+
+							})
+							.pipe(fs.createWriteStream(filename)).on("finish", () => {
+								// Make sure the stream is closed so the file is accessable.
+								stream.close();
+
+								progressWin.webContents.executeJavaScript(`
+									updateProgress(` + JSON.stringify({
+									percent: 1
+								}) + `);
+								`);
+
+								// Wait five seconds before attempting to install.
+								// This should reduce the amount of installation failures until I find a better solution.
+								setTimeout(() => {
+									progressWin.close();
+								}, 5000);
+							});
+					}
+				}
+			});
 		}
 
 		// Change the height of the webview when the toolbar is hovered.
@@ -226,10 +380,6 @@
 
 
 
-
-		webview.on("dom-ready", () => {
-			webview[0].openDevTools();
-		});
 
 		// Mirror all console messages to the main page's console.
 		webview.on('console-message', (e) => {
