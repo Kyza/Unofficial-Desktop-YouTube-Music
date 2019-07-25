@@ -108,6 +108,7 @@
 					},
 					json: true,
 					success: function(result) {
+						console.log(result);
 						let resultHTML = result;
 
 						let regExp = /(?:_id:')(.*)(?:',)/;
@@ -140,7 +141,13 @@
 								progressWin.setMenu(null);
 								progressWin.center();
 
-								downloadSong(match[1], songID, filename);
+								if (match[1]) {
+									downloadSong(match[1], songID, filename);
+								} else {
+									dialog.showMessageBox({
+										'message': `There was an error downloading the song.\nPlease try again.`
+									});
+								}
 							}
 						});
 					}
