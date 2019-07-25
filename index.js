@@ -95,6 +95,7 @@ function downloadInstallNewVersion(versionID) {
       progressWin.setIgnoreMouseEvents(true)
       progressWin.loadFile("./progress.html");
       progressWin.setMenu(null);
+      progressWin.center();
 
       var stream = progress(request({
           url: body[i].browser_download_url,
@@ -183,7 +184,7 @@ function openFile(filePath, delay, tries, currentTry) {
 
 
 // Set the Discord Rish Presence.
-const client = require('discord-rich-presence')('602320411216052240');
+var client = require('discord-rich-presence')('602320411216052240');
 
 ipcMain.on("rich-presence-data", (event, arg) => {
   console.log(arg);
@@ -210,6 +211,7 @@ var songPaused = false;
 var lookingForSong = false;
 
 function setActivity() {
+  var client = require('discord-rich-presence')('602320411216052240');
   if (!songPaused) {
     client.updatePresence({
       state: songAuthor,
@@ -223,7 +225,7 @@ function setActivity() {
     });
   } else if (lookingForSong) {
     client.updatePresence({
-      state: "Searching for a song",
+      state: "Listening to an advertisement",
       details: "Paused",
       startTimestamp: songStartedTime,
       largeImageKey: 'logo',
@@ -381,12 +383,24 @@ app.on("ready", () => {
   });
 
   globalShortcut.register("MediaPreviousTrack", () => {
+    win.webContents.executeJavaScript(`
+      previousTrack();
+    `);
   });
   globalShortcut.register("MediaPlayPause", () => {
+    win.webContents.executeJavaScript(`
+      togglePlaying();
+    `);
   });
   globalShortcut.register("MediaStop", () => {
+    win.webContents.executeJavaScript(`
+      togglePlaying(false);
+    `);
   });
   globalShortcut.register("MediaNextTrack", () => {
+    win.webContents.executeJavaScript(`
+      nextTrack();
+    `);
   });
 
 

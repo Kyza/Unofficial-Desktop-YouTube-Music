@@ -1,9 +1,16 @@
 <head>
-	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	<script>
+		if (typeof module === 'object') {
+			window.module = module;
+			module = undefined;
+		}
+	</script>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 
-	<script>if (window.module) module = window.module;</script>
+	<script>
+		if (window.module) module = window.module;
+	</script>
 </head>
 
 <body style="margin: 0px !important; background-color: black; color: white;">
@@ -13,6 +20,8 @@
 		<div id="back-button" class="toolbar-button"></div>
 		<div id="reload-button" class="toolbar-button"></div>
 		<div id="forward-button" class="toolbar-button"></div>
+		<div id="not-on-top-button" class="toolbar-button"></div>
+		<div id="on-top-button" class="toolbar-button"></div>
 	</div>
 
 	<div id="loading-text" style="z-index: 0; z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;">
@@ -27,7 +36,7 @@
 			remote
 		} = require('electron');
 
-		const webview = $("webview");
+		const webview = $("#webview");
 		const loadingText = $("#loading-text");
 		const toolbar = $("#toolbar");
 
@@ -44,6 +53,27 @@
 		forwardButton.on("click", () => {
 			window.history.forward();
 		});
+
+		var notOnTopButton = $("#not-on-top-button");
+		var onTopButton = $("#on-top-button");
+		setAlwaysOnTop(false);
+		notOnTopButton.on("click", () => {
+			setAlwaysOnTop(false);
+		});
+		onTopButton.on("click", () => {
+			setAlwaysOnTop(true);
+		});
+
+		function setAlwaysOnTop(value) {
+			remote.getCurrentWindow().setAlwaysOnTop(value);
+			if (value) {
+				onTopButton.css("display", "none");
+				notOnTopButton.css("display", "");
+			} else {
+				notOnTopButton.css("display", "none");
+				onTopButton.css("display", "");
+			}
+		}
 
 		// Change the height of the webview when the toolbar is hovered.
 		openToolbar();
@@ -74,8 +104,70 @@
 		}
 
 
+		function previousTrack() {
+			webview[0].executeJavaScript(`
+				function eventFire(el, etype){
+					if (el.fireEvent) {
+						el.fireEvent('on' + etype);
+					} else {
+						var evObj = document.createEvent('Events');
+						evObj.initEvent(etype, true, false);
+						el.dispatchEvent(evObj);
+					}
+				}
+				var nextTrackButton = document.querySelector(".previous-button.ytmusic-player-bar");
+				eventFire(nextTrackButton, "click");
+			`);
+		}
+
+		function togglePlaying(value) {
+			webview[0].executeJavaScript(`
+				function eventFire(el, etype){
+					if (el.fireEvent) {
+						el.fireEvent('on' + etype);
+					} else {
+						var evObj = document.createEvent('Events');
+						evObj.initEvent(etype, true, false);
+						el.dispatchEvent(evObj);
+					}
+				}
+				var playPauseButton = document.querySelector("#play-pause-button");
+				var songPaused = (playPauseButton.title == "Play" ? true : false);
+				var value = ` + value + `;
+				if (value != undefined) {
+					if (songPaused && value) {
+						eventFire(playPauseButton, "click");
+					} else if (!songPaused && !value) {
+						eventFire(playPauseButton, "click");
+					}
+				} else {
+					eventFire(playPauseButton, "click");
+				}
+			`);
+		}
+
+		function nextTrack() {
+			webview[0].executeJavaScript(`
+				function eventFire(el, etype){
+					if (el.fireEvent) {
+						el.fireEvent('on' + etype);
+					} else {
+						var evObj = document.createEvent('Events');
+						evObj.initEvent(etype, true, false);
+						el.dispatchEvent(evObj);
+					}
+				}
+				var nextTrackButton = document.querySelector(".next-button.ytmusic-player-bar");
+				eventFire(nextTrackButton, "click");
+			`);
+		}
+
+
 		// Add the link handling for the main process to use.
 		function pasteLink() {
+			// Execute the paste command in case someone was pasting for a different reason.
+			webview[0].paste();
+
 			// Parse the YouTube link and handle how to navigate to it.
 			var clipboardText = clipboard.readText("clipboard");
 
@@ -135,8 +227,10 @@
 
 
 
-		// Handle loading animations.
-		webview.on("dom-ready", () => {});
+		webview.on("dom-ready", () => {
+			webview[0].openDevTools();
+		});
+
 		// Mirror all console messages to the main page's console.
 		webview.on('console-message', (e) => {
 			console.log("Webview:\n" + e.message);

@@ -19,6 +19,7 @@ body {
 }
 
 #toolbar {
+  padding: 0px;
 }
 
 #toolbar.toolbar-closed {
@@ -76,4 +77,13 @@ body {
 #forward-button {
   background-image: url("https://image.flaticon.com/icons/svg/126/126492.svg");
   transform: rotateY(180deg);
+}
+
+#on-top-button {
+  background-image: url("https://image.flaticon.com/icons/svg/61/61845.svg");
+}
+
+#not-on-top-button {
+  background-image: url("https://image.flaticon.com/icons/svg/61/61845.svg"), url("https://image.flaticon.com/icons/svg/803/803294.svg");
+  background-size: 30px, 40px;
 }
