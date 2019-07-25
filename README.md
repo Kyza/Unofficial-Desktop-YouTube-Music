@@ -16,11 +16,12 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
   - [x] Control the window with the tray icon.
   - [ ] Pause, play, skip, and go back to the previous song using the tray.
   - [ ] Pause, play, skip, and go back to the previous song using the Windows thumbbar buttons.
-  - [ ] Media key support.
+  - [x] Media key support.
   - [ ] Optional open on startup that defaults to off.
 - [x] Paste song links to jump to them.
   - [x] Works with most YouTube links, even incomplete/invalid ones.
 - [x] Automatic updates.
+- [x] Easy togglable always on top button.
 - [ ] Song downloader.
 
 # Known Bugs
