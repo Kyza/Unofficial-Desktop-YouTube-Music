@@ -83,6 +83,7 @@ function downloadInstallNewVersion(versionID) {
         width: 800,
         height: 20,
         webPreferences: {
+          "web-security": false,
           nodeIntegration: true,
           webviewTag: true
         },
