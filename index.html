@@ -1,7 +1,7 @@
 <head>
 	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 
 	<script>if (window.module) module = window.module;</script>
 </head>
@@ -46,7 +46,10 @@
 		});
 
 		// Change the height of the webview when the toolbar is hovered.
-		closeToolbar();
+		openToolbar();
+		setTimeout(() => {
+			closeToolbar();
+		}, 5000);
 		toolbar.on("mouseover", () => {
 			openToolbar();
 		});
@@ -61,6 +64,7 @@
 			webview.removeClass("toolbar-closed");
 			webview.addClass("toolbar-open");
 		}
+
 		function closeToolbar() {
 			toolbar.removeClass("toolbar-open");
 			toolbar.addClass("toolbar-closed");

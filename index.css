@@ -18,6 +18,9 @@ body {
   transition-duration: 0.5s;
 }
 
+#toolbar {
+}
+
 #toolbar.toolbar-closed {
   height: 10px;
   background-color: rgba(255, 255, 255, 0.2);
@@ -47,12 +50,15 @@ body {
   min-width: 50px;
   height: 50px;
   line-height: 50px;
+	margin: 0px;
   text-align: center;
   background-position: center;
   background-size: 30px;
   background-repeat: no-repeat;
   filter: invert(100%);
   transition-duration: 1s;
+
+	-webkit-app-region: no-drag;
 }
 
 .toolbar-button:hover {
