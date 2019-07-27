@@ -50,6 +50,6 @@ Toolbar icons are owned by [Flaticon](https://www.flaticon.com/).
 
 # Disclaimers
 
-- Niether Google, nor YouTube or YouTube Music, nor any media on or related to Google, YouTube, or YouTube Music is owned by me.
+- Neither Google, nor YouTube or YouTube Music, nor any media on or related to Google, YouTube, or YouTube Music is owned by me.
 - I am not affiliated with, nor am I an employee or part of Google, YouTube or YouTube Music.
 - This program is unofficial, and is not endorsed or recognized by Google, nor YouTube or YouTube Music.
