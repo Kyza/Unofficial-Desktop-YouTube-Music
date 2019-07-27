@@ -27,6 +27,7 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app?
 # Known Bugs
 
 - Rarely, the installer fails to open because it is still locked by the automatic update downloader.
+  - Just restart the app and try the update again.
 
 # Images
 
