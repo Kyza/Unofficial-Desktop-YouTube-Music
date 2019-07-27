@@ -1,5 +1,5 @@
 # Desktop YouTube Music
-Ever wanted to use YouTube Music but with the functionality of a desktop app?
+Ever wanted to use YouTube Music but with the functionality of a desktop app like Spotify?
 
 # Features
 
