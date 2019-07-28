@@ -23,6 +23,7 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app lik
 - [x] Automatic updates.
 - [x] Togglable always on top button.
 - [ ] Song downloader.
+- [ ] Custom playback speed.
 
 # Known Bugs
 
@@ -38,6 +39,10 @@ Ever wanted to use YouTube Music but with the functionality of a desktop app lik
 <img src="https://i.vgy.me/qEGICa.png" />
 
 <img src="https://i.vgy.me/Cbr2ZB.png" />
+
+Custom playback speed:
+
+<img src="https://i.vgy.me/b3cUvm.gif" />
 
 # How To Use
 
