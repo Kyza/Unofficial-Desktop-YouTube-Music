@@ -70,10 +70,6 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 
 <img src="https://i.vgy.me/Cbr2ZB.png" />
 
-Custom playback speed:
-
-<img src="https://i.vgy.me/b3cUvm.gif" />
-
 # How To Use
 
 ## Linux support is here (mostly)!
