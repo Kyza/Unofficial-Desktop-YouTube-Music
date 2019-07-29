@@ -10,6 +10,8 @@ const {
 
 var opn = require('opn');
 
+const platform = require('os').platform();
+
 const homedir = require('os').homedir();
 
 const {
@@ -65,6 +67,10 @@ function checkForUpdate() {
   });
 }
 
+function fileExt(fileName) {
+  return (/[.]/.exec(fileName)) ? /[^.]+$/.exec(fileName) : undefined;
+}
+
 function downloadInstallNewVersion(versionID) {
   request({
     url: "https://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases/" + versionID + "/assets",
@@ -78,81 +84,82 @@ function downloadInstallNewVersion(versionID) {
 
       var filePath = homedir + "/" + fileName.replace("./", "");
 
+      if ((platform == "win32" && fileExt(fileName) == "exe") || (platform == "linux" && fileExt(fileName) == "AppImage")) {
+        var progressWin = new BrowserWindow({
+          width: 800,
+          height: 20,
+          webPreferences: {
+            "web-security": false,
+            nodeIntegration: true,
+            webviewTag: true
+          },
+          title: "Downloading Installer",
+          icon: __dirname + "/images/favicon.png",
+          frame: false,
+          transparent: true
+        });
+        progressWin.setAlwaysOnTop(true);
+        progressWin.setIgnoreMouseEvents(true);
+        progressWin.loadFile("./progress.html");
+        progressWin.setMenu(null);
+        progressWin.center();
 
-      var progressWin = new BrowserWindow({
-        width: 800,
-        height: 20,
-        webPreferences: {
-          "web-security": false,
-          nodeIntegration: true,
-          webviewTag: true
-        },
-        title: "Downloading Installer",
-        icon: __dirname + "/images/favicon.png",
-        frame: false,
-        transparent: true
-      });
-      progressWin.setAlwaysOnTop(true);
-      progressWin.setIgnoreMouseEvents(true);
-      progressWin.loadFile("./progress.html");
-      progressWin.setMenu(null);
-      progressWin.center();
-
-      var stream = progress(request({
-          url: body[i].browser_download_url,
-          headers: {
-            "User-Agent": "Awesome-Octocat-App"
-          }
-        }), {
-          throttle: 100,
-          delay: 0
-        })
-        .on('progress', function(state) {
-          // The state is an object that looks like this:
-          // {
-          //     percent: 0.5,               // Overall percent (between 0 to 1)
-          //     speed: 554732,              // The download speed in bytes/sec
-          //     size: {
-          //         total: 90044871,        // The total payload size in bytes
-          //         transferred: 27610959   // The transferred payload size in bytes
-          //     },
-          //     time: {
-          //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
-          //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
-          //     }
-          // }
-          progressWin.webContents.executeJavaScript(`
+        var stream = progress(request({
+            url: body[i].browser_download_url,
+            headers: {
+              "User-Agent": "Awesome-Octocat-App"
+            }
+          }), {
+            throttle: 100,
+            delay: 0
+          })
+          .on('progress', function(state) {
+            // The state is an object that looks like this:
+            // {
+            //     percent: 0.5,               // Overall percent (between 0 to 1)
+            //     speed: 554732,              // The download speed in bytes/sec
+            //     size: {
+            //         total: 90044871,        // The total payload size in bytes
+            //         transferred: 27610959   // The transferred payload size in bytes
+            //     },
+            //     time: {
+            //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
+            //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
+            //     }
+            // }
+            progressWin.webContents.executeJavaScript(`
             updateProgress(` + JSON.stringify(state) + `);
           `);
-        })
-        .on('error', function(err) {
-          dialog.showMessageBox({
-            'message': `${err}`
-          });
-        })
-        .on('end', function() {
+          })
+          .on('error', function(err) {
+            dialog.showMessageBox({
+              'message': `${err}`
+            });
+          })
+          .on('end', function() {
 
-        })
-        .pipe(fs.createWriteStream(filePath)).on("finish", () => {
-          // Make sure the stream is closed so the file is accessable.
-          stream.close();
+          })
+          .pipe(fs.createWriteStream(filePath)).on("finish", () => {
+            // Make sure the stream is closed so the file is accessable.
+            stream.close();
 
-          progressWin.webContents.executeJavaScript(`
+            progressWin.webContents.executeJavaScript(`
             updateProgress(` + JSON.stringify({
-            percent: 1
-          }) + `);
+              percent: 1
+            }) + `);
           `);
 
-          // Wait five seconds before attempting to install.
-          // This should reduce the amount of installation failures until I find a better solution.
-          setTimeout(() => {
-            progressWin.close();
+            // Wait five seconds before attempting to install.
+            // This should reduce the amount of installation failures until I find a better solution.
+            setTimeout(() => {
+              progressWin.close();
 
-            // Try opening the file 4 times over 10 seconds.
-            // If it can't, then the error is most likely not a locked file.
-            openFile(filePath, 2500, 4);
-          }, 5000);
-        });
+              // Try opening the file 4 times over 10 seconds.
+              // If it can't, then the error is most likely not a locked file.
+              openFile(filePath, 2500, 4);
+            }, 5000);
+          });
+      }
     }
   });
 }
