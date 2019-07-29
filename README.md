@@ -82,7 +82,7 @@ It's easy! Just go to [releases](https://github.com/KyzaGitHub/Unofficial-Deskto
 
 The application logo, and Discord Rich Presence icon is owned by [YouTube Music](https://music.youtube.com/).
 
-Toolbar icons are owned by [Flaticon](https://www.flaticon.com/).
+The toolbar icons are owned by [Flaticon](https://www.flaticon.com/).
 
 # Disclaimers
 
