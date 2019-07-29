@@ -25,6 +25,12 @@
 		<div id="not-on-top-button" class="toolbar-button"></div>
 		<div id="on-top-button" class="toolbar-button"></div>
 		<div id="download-button" class="toolbar-button"></div>
+		<div id="playback-speed-button" class="toolbar-button">
+			<div id="playback-speed-button-icon"></div>
+			<div id="playback-speed-button-input">
+				<input type="number" value="1.0" min="0.1" max="2.0" step="0.1" />
+			</div>
+		</div>
 	</div>
 
 	<div id="loading-text" style="z-index: 0; position: absolute; top: 50%; left: 50%; font-size: 32px; transform: translate(-50%, -50%); opacity: 1;">
@@ -91,6 +97,17 @@
 			}
 		}
 
+		// Try to set the media player's speed.
+		function setPlayerSpeed(speed) {
+			webview[0].executeJavaScript(`
+				document.querySelector("video").playbackRate = ` + speed + `;
+			`);
+		}
+		var playbackSpeed = 1.5;
+		setInterval(() => {
+			setPlayerSpeed(playbackSpeed);
+		}, 1000);
+
 		var progressWin;
 
 		// Handle downloading the song.
@@ -116,7 +133,9 @@
 						var downloadURL = match[1].substr(0, match[1].length - 1);
 
 						console.log(downloadURL);
-						console.log(`https://r2---sn-vgqskn76.googlevideo.com/videoplayback?expire=1564103997&ei=3QA6XcS3H9GXhwa39LmIDA&ip=98.102.99.165&id=o-ADCpkdLe45xPGQrYCGt_-_GoU0UKnA0DwvT8TTJ7DVgb&itag=243&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C248%2C278&source=youtube&requiressl=yes&mm=31%2C26&mn=sn-vgqskn76%2Csn-p5qlsndz&ms=au%2Conr&mv=m&mvi=1&pl=23&gcr=us&initcwndbps=1826250&mime=video%2Fwebm&gir=yes&clen=1382726&dur=232.332&lmt=1524826564149050&mt=1564082314&fvip=2&keepalive=yes&c=WEB&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cgcr%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AHylml4wRQIhAL2kK2lI2-7mXEEKLzrxgJgcQL4pdw6LmKiH99SXSS0hAiA-CPXtuVcKootGuZA_litEFzuqZH5XpRDrQ7NX1McbVA%3D%3D&alr=yes&sig=ALgxI2wwRQIgBsrluAZR7Wjqvdd5L3QQRNMDHov1gtQ3l3Br1g1gvFMCIQCYZQXP2S98ZEvwpUbiQDLoKeidX6LvXCzY-4Z_-tjFtA%3D%3D&cpn=bypiog-I8Q1NgrJ4&cver=2.20190725&range=0-66491&altitags=242%2C278&rn=1&rbuf=0`);
+						console.log(
+							`https://r2---sn-vgqskn76.googlevideo.com/videoplayback?expire=1564103997&ei=3QA6XcS3H9GXhwa39LmIDA&ip=98.102.99.165&id=o-ADCpkdLe45xPGQrYCGt_-_GoU0UKnA0DwvT8TTJ7DVgb&itag=243&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C248%2C278&source=youtube&requiressl=yes&mm=31%2C26&mn=sn-vgqskn76%2Csn-p5qlsndz&ms=au%2Conr&mv=m&mvi=1&pl=23&gcr=us&initcwndbps=1826250&mime=video%2Fwebm&gir=yes&clen=1382726&dur=232.332&lmt=1524826564149050&mt=1564082314&fvip=2&keepalive=yes&c=WEB&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cgcr%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&lsparams=mm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AHylml4wRQIhAL2kK2lI2-7mXEEKLzrxgJgcQL4pdw6LmKiH99SXSS0hAiA-CPXtuVcKootGuZA_litEFzuqZH5XpRDrQ7NX1McbVA%3D%3D&alr=yes&sig=ALgxI2wwRQIgBsrluAZR7Wjqvdd5L3QQRNMDHov1gtQ3l3Br1g1gvFMCIQCYZQXP2S98ZEvwpUbiQDLoKeidX6LvXCzY-4Z_-tjFtA%3D%3D&cpn=bypiog-I8Q1NgrJ4&cver=2.20190725&range=0-66491&altitags=242%2C278&rn=1&rbuf=0`
+						);
 
 						dialog.showSaveDialog({
 							title: "Save Song",
@@ -225,7 +244,8 @@
 
 
 		function previousTrack() {
-			webview[0].executeJavaScript(`
+			webview[0].executeJavaScript(
+				`
 				function eventFire(el, etype){
 					if (el.fireEvent) {
 						el.fireEvent('on' + etype);
@@ -237,11 +257,13 @@
 				}
 				var nextTrackButton = document.querySelector(".previous-button.ytmusic-player-bar");
 				eventFire(nextTrackButton, "click");
-			`);
+			`
+			);
 		}
 
 		function togglePlaying(value) {
-			webview[0].executeJavaScript(`
+			webview[0].executeJavaScript(
+				`
 				function eventFire(el, etype){
 					if (el.fireEvent) {
 						el.fireEvent('on' + etype);
@@ -253,7 +275,9 @@
 				}
 				var playPauseButton = document.querySelector("#play-pause-button");
 				var songPaused = (playPauseButton.title == "Play" ? true : false);
-				var value = ` + value + `;
+				var value = ` +
+				value +
+				`;
 				if (value != undefined) {
 					if (songPaused && value) {
 						eventFire(playPauseButton, "click");
@@ -263,11 +287,13 @@
 				} else {
 					eventFire(playPauseButton, "click");
 				}
-			`);
+			`
+			);
 		}
 
 		function nextTrack() {
-			webview[0].executeJavaScript(`
+			webview[0].executeJavaScript(
+				`
 				function eventFire(el, etype){
 					if (el.fireEvent) {
 						el.fireEvent('on' + etype);
@@ -279,7 +305,8 @@
 				}
 				var nextTrackButton = document.querySelector(".next-button.ytmusic-player-bar");
 				eventFire(nextTrackButton, "click");
-			`);
+			`
+			);
 		}
 
 

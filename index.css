@@ -52,19 +52,17 @@ body {
   min-width: 50px;
   height: 50px;
   line-height: 50px;
-	margin: 0px;
+  margin: 0px;
   text-align: center;
   background-position: center;
   background-size: 30px;
   background-repeat: no-repeat;
   filter: invert(100%);
   transition-duration: 1s;
-
-	-webkit-app-region: no-drag;
 }
 
 .toolbar-button:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 #back-button {
@@ -91,4 +89,20 @@ body {
 
 #download-button {
   background-image: url("https://image.flaticon.com/icons/svg/126/126488.svg");
+}
+
+#playback-speed-button {
+	background-color: red;
+}
+
+#playback-speed-button-icon {
+	background-image: url("https://image.flaticon.com/icons/svg/2/2204.svg");
+}
+
+#playback-speed-button-input {
+  border: none;
+}
+
+#playback-speed-button-input > input:focus {
+  outline: none;
 }
