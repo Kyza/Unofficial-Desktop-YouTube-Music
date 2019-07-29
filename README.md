@@ -55,6 +55,8 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 
 # Known Bugs
 
+- It won't update! This is because I recently changed the name of the GitHub repository.
+  - Make sure you download the latest working version of the app from the [releases](). That's currently v0.0.10.
 - Rarely, the installer fails to open because it is still locked by the automatic update downloader.
   - Just restart the app and try the update again.
 
