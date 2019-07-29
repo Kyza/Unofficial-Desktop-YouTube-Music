@@ -29,6 +29,19 @@ const path = require("path");
 
 var askedToUpdate = false;
 
+Number.prototype.round = function(places) {
+  if (!("" + this).includes("e")) {
+    return +(Math.round(this + "e+" + places) + "e-" + places);
+  } else {
+    var arr = ("" + this).split("e");
+    var sig = ""
+    if (+arr[1] + places > 0) {
+      sig = "+";
+    }
+    return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + places)) + "e-" + places);
+  }
+}
+
 function checkForUpdate() {
   request({
     url: "http://api.github.com/repos/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases",
@@ -190,12 +203,20 @@ function openFile(filePath, delay, tries, currentTry) {
 }
 
 
+// Keep a global reference of the window object, if you don"t, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win;
+let isQuiting;
+let tray;
+let trayMenu;
+
 
 // Set the Discord Rish Presence.
 const client = require('discord-rich-presence')('602320411216052240');
 
 ipcMain.on("rich-presence-data", (event, arg) => {
   setRPData(arg);
+  setProgressBar();
   setActivity();
 });
 
@@ -203,6 +224,7 @@ function setRPData(data) {
   songName = data.songName;
   songAuthor = data.songAuthor;
   songStartedTime = data.songStartedTime;
+  songCurrentTime = data.songCurrentTime;
   songEndsTime = data.songEndsTime;
   songPaused = data.songPaused;
 }
@@ -211,6 +233,7 @@ var songName = "";
 var songAuthor = "";
 
 var songStartedTime = Date.now();
+var songCurrentTime = Date.now() + 133337;
 var songEndsTime = Date.now() + 133337;
 
 var songPaused = false;
@@ -222,7 +245,7 @@ function setActivity() {
     client.updatePresence({
       state: songAuthor,
       details: songName,
-      startTimestamp: songStartedTime,
+      startTimestamp: songCurrentTime,
       endTimestamp: songEndsTime,
       largeImageKey: 'logo',
       smallImageKey: 'kyza',
@@ -233,7 +256,7 @@ function setActivity() {
     client.updatePresence({
       state: "Listening to an advertisement",
       details: "Paused",
-      startTimestamp: songStartedTime,
+      startTimestamp: songCurrentTime,
       largeImageKey: 'logo',
       smallImageKey: 'kyza',
       largeImageText: "bit.ly/DesktopYTMusic",
@@ -243,7 +266,7 @@ function setActivity() {
     client.updatePresence({
       state: "Listening to silence",
       details: "Paused",
-      startTimestamp: songStartedTime,
+      startTimestamp: songCurrentTime,
       largeImageKey: 'logo',
       smallImageKey: 'kyza',
       largeImageText: "bit.ly/DesktopYTMusic",
@@ -252,12 +275,11 @@ function setActivity() {
   }
 }
 
-// Keep a global reference of the window object, if you don"t, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win;
-let isQuiting;
-let tray;
-let trayMenu;
+// Set the taskbar progress.
+function setProgressBar() {
+  let progress = ((songCurrentTime - songStartedTime) / (songEndsTime - songStartedTime));
+  win.setProgressBar(progress, { mode: songPaused ? "paused" : "normal" });
+}
 
 function createWindow() {
   checkForUpdate();
@@ -361,6 +383,7 @@ function shownContextMenu() {
 function showWindow() {
   win.show();
   shownContextMenu();
+  setProgressBar();
 }
 
 function hideWindow() {

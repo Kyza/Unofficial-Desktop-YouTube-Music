@@ -442,8 +442,9 @@
 						var currentTimeMS = (parseInt(currentTime.split(":")[1]) * 1000) + (parseInt(currentTime.split(":")[0]) * 60000);
 						var totalTimeMS = (parseInt(totalTime.split(":")[1]) * 1000) + (parseInt(totalTime.split(":")[0]) * 60000);
 
-						songStartedTime = Date.now();
+						songCurrentTime = Date.now();
 						songEndsTime = Date.now() + totalTimeMS - currentTimeMS;
+						songStartedTime = Date.now() - currentTimeMS;
 					} catch (e) {}
 				}
 
@@ -465,6 +466,7 @@
 		var songName = "";
 
 		var songStartedTime = Date.now();
+		var songCurrentTime = Date.now();
 		var songEndsTime = Date.now();
 
 		var songPaused = true;
@@ -478,6 +480,7 @@
 					"songName": songName,
 					"songAuthor": songAuthor,
 					"songStartedTime": songStartedTime,
+					"songCurrentTime": songCurrentTime,
 					"songEndsTime": songEndsTime,
 					"songPaused": songPaused
 				});
@@ -486,6 +489,7 @@
 					"songName": songName,
 					"songAuthor": songAuthor,
 					"songStartedTime": songStartedTime,
+					"songCurrentTime": songCurrentTime,
 					"songEndsTime": songEndsTime,
 					"songPaused": songPaused
 				});
@@ -497,6 +501,6 @@
 		setInterval(() => {
 			console.log(songPaused);
 			sendRPData();
-		}, 15e3);
+		}, 1e3);
 	</script>
 </body>
