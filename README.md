@@ -1,7 +1,34 @@
 # Desktop YouTube Music
 Ever wanted to use YouTube Music but with the functionality of a desktop app like Spotify?
 
-# Features
+# Table Of Contents
+
+- [About](#about)
+  - [Summary](#summary)
+  - [Features](#features)
+- [Known Bugs](#known-bugs)
+- [Images](#images)
+- [How To Use](#how-to-use)
+- [Credits](#credits)
+- [Disclaimers](#disclaimers)
+
+# About
+
+## Summary
+
+I made Desktop YouTube Music because I was tired of Spotify's bad performance, frequent advertisements, and bad suggestions.
+
+I figured that since Google is one of the major companies trying to give you the best suggestions, that YouTube Music would be the way to go.
+
+I used the web version for a while, but then I wondered if they had made a desktop app version like Spotify.
+
+No, they hadn't. Why? I have no idea.
+
+There are a couple user-made versions (excluding the one for Google Play Music, that's unrelated), but I thought I could do better.
+
+So here I am. I use ElectronJS
+
+## Features
 
 - [x] Super lightweight.
 - [x] Faster performance than Spotify, with a larger selection of songs.
@@ -49,7 +76,7 @@ Custom playback speed:
 
 ## Linux support is here (mostly)!
 
-It's easy! Just go to [releases](https://github.com/KyzaGitHub/Desktop-YouTube-Music/releases), expand `Assets`, and install the correct version for your computer. No MacOS yet, sorry guys.
+It's easy! Just go to [releases](https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases), expand `Assets`, and install the correct version for your computer. No MacOS yet, sorry guys.
 
 <img src="https://i.vgy.me/lqzdCn.png" />
 
