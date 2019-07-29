@@ -26,7 +26,7 @@ No, they hadn't. Why? I have no idea.
 
 There are a couple user-made versions (excluding the one for Google Play Music, that's unrelated), but I thought I could do better.
 
-So here I am. I use ElectronJS
+I use [Electron](https://electronjs.org/) to make and modify the app, adding features that the community wants.
 
 ## Features
 
