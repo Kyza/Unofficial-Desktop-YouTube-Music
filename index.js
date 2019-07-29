@@ -188,9 +188,6 @@ function openFile(filePath, delay, tries, currentTry) {
 const client = require('discord-rich-presence')('602320411216052240');
 
 ipcMain.on("rich-presence-data", (event, arg) => {
-  dialog.showMessageBox({
-    'message': JSON.stringify(arg, null, 2)
-  });
   setRPData(arg);
   setActivity();
 });
