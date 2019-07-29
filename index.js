@@ -31,7 +31,7 @@ var askedToUpdate = false;
 
 function checkForUpdate() {
   request({
-    url: "http://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases",
+    url: "http://api.github.com/repos/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases",
     headers: {
       "User-Agent": "Awesome-Octocat-App"
     },
@@ -53,7 +53,7 @@ function checkForUpdate() {
             win.close();
             tray.destroy();
 
-            opn("https://github.com/KyzaGitHub/Desktop-YouTube-Music/releases");
+            opn("https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases");
 
             downloadInstallNewVersion(body[0].id);
           }
@@ -73,7 +73,7 @@ function fileExt(fileName) {
 
 function downloadInstallNewVersion(versionID) {
   request({
-    url: "https://api.github.com/repos/KyzaGitHub/Desktop-YouTube-Music/releases/" + versionID + "/assets",
+    url: "https://api.github.com/repos/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases/" + versionID + "/assets",
     headers: {
       "User-Agent": "Awesome-Octocat-App"
     },
