@@ -188,7 +188,9 @@ function openFile(filePath, delay, tries, currentTry) {
 const client = require('discord-rich-presence')('602320411216052240');
 
 ipcMain.on("rich-presence-data", (event, arg) => {
-  console.log(arg);
+  dialog.showMessageBox({
+    'message': JSON.stringify(arg, null, 2)
+  });
   setRPData(arg);
   setActivity();
 });
@@ -212,7 +214,6 @@ var songPaused = false;
 var lookingForSong = false;
 
 function setActivity() {
-	console.log(songPaused);
   if (!songPaused) {
     client.updatePresence({
       state: songAuthor,

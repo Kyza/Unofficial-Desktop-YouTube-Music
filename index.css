@@ -37,7 +37,7 @@ body {
 
 #toolbar.toolbar-closed>.toolbar-button {
   opacity: 0;
-  height: 4px !important;
+  height: 0px !important;
   line-height: 10px;
   transition-duration: 0.5s;
 }
@@ -92,17 +92,65 @@ body {
 }
 
 #playback-speed-button {
-	background-color: red;
+  min-width: 150px;
 }
 
 #playback-speed-button-icon {
-	background-image: url("https://image.flaticon.com/icons/svg/2/2204.svg");
+  width: 40%;
+  height: 100%;
+  left: 0px;
+  filter: invert(0%) !important;
+  background-position: center;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-image: url("https://image.flaticon.com/icons/svg/2/2204.svg");
 }
 
 #playback-speed-button-input {
+  transform: translateX(66.66%) translateY(-100%);
+  float: left;
+  width: 60%;
+  height: 100%;
   border: none;
 }
 
-#playback-speed-button-input > input:focus {
+
+#playback-speed-button-input>button {
+  float: right;
+  background-color: transparent;
+  width: 35%;
+  height: 100%;
+  border: none;
+  transition-duration: 1s;
+}
+
+/* Inputs can't resize to 0px. */
+#toolbar.toolbar-closed #playback-speed-button-input>* {
+  display: none !important;
+}
+
+#playback-speed-button-input>input {
+  background-color: transparent;
+  text-align: center;
+  width: 30%;
+  height: 100%;
+  border: none;
+  transition-duration: 1s;
+}
+
+#playback-speed-button-input>input:hover {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+#playback-speed-button-input>button:hover {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+#playback-speed-button-input>input:focus, #playback-speed-button-input>button:focus {
   outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  display: none;
 }
