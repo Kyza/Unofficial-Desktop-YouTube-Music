@@ -313,33 +313,6 @@ function createWindow() {
 
   showWindow();
 
-  if (win.setThumbarButtons([{
-      tooltip: "Previous Song",
-      icon: __dirname + "/images/previous.png",
-      flags: ["enabled"],
-      click() {
-        console.log("Previous clicked.");
-      }
-    }, {
-      tooltip: "Play",
-      icon: __dirname + "/images/play.png",
-      flags: ["enabled"],
-      click() {
-        console.log("Play clicked.");
-      }
-    }, {
-      tooltip: "Next Song",
-      icon: __dirname + "/images/next.png",
-      flags: ["enabled"],
-      click() {
-        console.log("Next clicked.");
-      }
-    }])) {
-    console.log("Thumbbar buttons are supported.");
-  } else {
-    console.log("Thumbbar buttons are not supported.");
-  }
-
   win.setMenu(null);
   win.maximize();
 
@@ -350,6 +323,35 @@ function createWindow() {
     event.preventDefault();
     hideWindow();
     event.returnValue = false;
+  });
+
+  win.on("focus", () => {
+    if (win.setThumbarButtons([{
+        tooltip: "Previous Song",
+        icon: __dirname + "/images/previous.png",
+        flags: ["enabled"],
+        click() {
+          console.log("Previous clicked.");
+        }
+      }, {
+        tooltip: "Play",
+        icon: __dirname + "/images/play.png",
+        flags: ["enabled"],
+        click() {
+          console.log("Play clicked.");
+        }
+      }, {
+        tooltip: "Next Song",
+        icon: __dirname + "/images/next.png",
+        flags: ["enabled"],
+        click() {
+          console.log("Next clicked.");
+        }
+      }])) {
+      console.log("Thumbbar buttons are supported.");
+    } else {
+      console.log("Thumbbar buttons are not supported.");
+    }
   });
 }
 
