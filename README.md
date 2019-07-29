@@ -47,6 +47,8 @@ Custom playback speed:
 
 # How To Use
 
+## Linux support is here (mostly)!
+
 It's easy! Just go to [releases](https://github.com/KyzaGitHub/Desktop-YouTube-Music/releases), expand `Assets`, and install the correct version for your computer. No MacOS yet, sorry guys.
 
 <img src="https://i.vgy.me/lqzdCn.png" />
