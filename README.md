@@ -48,6 +48,7 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 - [x] Paste song links to jump to them.
   - [x] Works with most YouTube links, even incomplete/invalid ones.
 - [x] Automatic updates.
+- [ ] Windows progress bar support.
 - [x] Togglable always on top button.
 - [ ] Song downloader.
 - [x] Adjustable playback speed.
