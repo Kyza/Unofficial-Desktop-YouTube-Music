@@ -24,6 +24,7 @@
   <img src="https://img.shields.io/github/languages/top/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
   <img src="https://img.shields.io/github/last-commit/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
   <img src="https://img.shields.io/codeclimate/maintainability/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/codeclimate/issues/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
   <img src="https://img.shields.io/codeclimate/tech-debt/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
 </p>
 
