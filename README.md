@@ -121,7 +121,7 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 
 ## Linux support is here (mostly)!
 
-It's easy! Just go to [releases](https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases), expand `Assets`, and install the correct version for your computer. No MacOS yet, sorry guys.
+It's easy! Just go to [releases](https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases), expand `Assets`, and install the correct version for your computer. No macOS yet, sorry guys.
 
 <img src="https://i.vgy.me/lqzdCn.png" />
 
