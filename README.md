@@ -23,6 +23,7 @@
   <img src="https://img.shields.io/github/package-json/dependency-version/KyzaGitHub/Unofficial-Desktop-YouTube-Music/dev/electron?style=flat-square" />
   <img src="https://img.shields.io/github/last-commit/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
   <img src="https://img.shields.io/codeclimate/maintainability/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/codeclimate/tech-debt/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
 </p>
 
 <hr>
