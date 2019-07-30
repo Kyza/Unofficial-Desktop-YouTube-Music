@@ -85,12 +85,14 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
   - [x] Control the window with the tray icon.
   - [ ] Pause, play, skip, and go back to the previous song using the tray.
   - [ ] Pause, play, skip, and go back to the previous song using the Windows thumbar buttons.
+    - In v0.0.11.
   - [x] Media key support.
   - [ ] Optional open on startup that defaults to off.
 - [x] Paste song links to jump to them.
   - [x] Works with most YouTube links, even incomplete/invalid ones.
 - [x] Automatic updates.
 - [ ] Windows progress bar support.
+  - In v0.0.11.
 - [x] Togglable always on top button.
 - [ ] Song downloader.
 - [x] Adjustable playback speed.
