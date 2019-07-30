@@ -252,16 +252,6 @@ function setActivity() {
       largeImageText: "bit.ly/DesktopYTMusic",
       smallImageText: "@Kyza#9994"
     });
-  } else if (lookingForSong) {
-    client.updatePresence({
-      state: "Listening to an advertisement",
-      details: "Paused",
-      startTimestamp: songCurrentTime,
-      largeImageKey: 'logo',
-      smallImageKey: 'kyza',
-      largeImageText: "bit.ly/DesktopYTMusic",
-      smallImageText: "@Kyza#9994"
-    });
   } else {
     client.updatePresence({
       state: "Listening to silence",
