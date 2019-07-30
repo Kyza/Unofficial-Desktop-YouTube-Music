@@ -2,6 +2,16 @@
 
 All notable changes will be documented in this file.
 
+## [4.0.0] - 2019-06-17
+
+### BREAKING
+
+- Minimum node.js version requirement is now v6
+
+### Changes
+
+- Upgraded dependencies (Espen Hovlandsdal)
+
 ## [3.4.0] - 2019-03-20
 
 ### Changes

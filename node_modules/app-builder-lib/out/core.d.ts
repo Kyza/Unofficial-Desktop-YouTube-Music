@@ -1,6 +1,8 @@
 /// <reference types="node" />
 import { Arch, ArchType } from "builder-util";
-import { Publish } from "builder-util-runtime";
+import { AllPublishOptions } from "builder-util-runtime";
+import { SnapStoreOptions } from "./publish/SnapStorePublisher";
+export declare type Publish = AllPublishOptions | SnapStoreOptions | Array<AllPublishOptions | SnapStoreOptions> | null;
 export declare type TargetConfigType = Array<string | TargetConfiguration> | string | TargetConfiguration | null;
 export interface TargetConfiguration {
     /**

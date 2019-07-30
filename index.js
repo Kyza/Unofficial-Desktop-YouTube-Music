@@ -281,7 +281,7 @@ function setProgressBar() {
   win.setProgressBar(progress, {
     mode: songPaused ? "paused" : "normal"
   });
-	setThumbbarButtons(songPaused);
+	setThumbarButtons(songPaused);
 }
 
 function createWindow() {
@@ -362,10 +362,10 @@ function showWindow() {
   win.show();
   shownContextMenu();
   setProgressBar();
-  setThumbbarButtons(true);
+  setThumbarButtons(true);
 }
 
-function setThumbbarButtons(play) {
+function setThumbarButtons(play) {
   return win.setThumbarButtons([{
     tooltip: "Previous Song",
     icon: __dirname + "/images/previous.png",
@@ -382,7 +382,7 @@ function setThumbbarButtons(play) {
 					togglePlaying();
 			`);
 			songPaused = !play;
-			setThumbbarButtons(!play);
+			setThumbarButtons(!play);
     }
   }, {
     tooltip: "Next Song",
