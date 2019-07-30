@@ -1,16 +1,56 @@
-# Desktop YouTube Music
-Ever wanted to use YouTube Music but with the functionality of a desktop app like Spotify?
+<p align="center">
+  <img width="25%" height="auto" src="https://raw.githubusercontent.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/master/images/logo.png" />
+</p>
+<p align="center">
+  Ever wanted to use YouTube Music but with the functionality of a desktop app like Spotify?
+</p>
 
-# Table Of Contents
+<hr>
 
-- [About](#about)
-  - [Summary](#summary)
-  - [Features](#features)
-- [Known Bugs](#known-bugs)
-- [Images](#images)
-- [How To Use](#how-to-use)
-- [Credits](#credits)
-- [Disclaimers](#disclaimers)
+<p align="center">
+  <img src="https://img.shields.io/github/downloads/KyzaGitHub/Unofficial-Desktop-YouTube-Music/total?style=flat-square" />
+  <img src="https://img.shields.io/github/stars/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/github/watchers/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/github/forks/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/github/contributors/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/package-json/v/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/github/release-pre/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/repo-size/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/github/package-json/dependency-version/KyzaGitHub/Unofficial-Desktop-YouTube-Music/dev/electron?style=flat-square" />
+  <img src="https://img.shields.io/github/last-commit/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/codeclimate/maintainability/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+</p>
+
+<hr>
+
+<p align="center">
+  <b>Table Of Contents</b>
+</p>
+
+<p align="center">
+  <a href="#about">About</a> - <a href="#summary">Summary</a> - <a href="#features">Features</a>
+</p>
+<p align="center">
+  <a href="#known-bugs">Known Bugs</a>
+</p>
+<p align="center">
+  <a href="#images">Images</a>
+</p>
+<p align="center">
+  <a href="#how-to-use">How To Use</a>
+</p>
+<p align="center">
+  <a href="#credits">Credits</a>
+</p>
+<p align="center">
+  <a href="#images">Disclaimers</a>
+</p>
+
+<hr>
 
 # About
 
