@@ -326,32 +326,6 @@ function createWindow() {
   });
 
   win.on("focus", () => {
-    if (win.setThumbarButtons([{
-        tooltip: "Previous Song",
-        icon: __dirname + "/images/previous.png",
-        flags: ["enabled"],
-        click() {
-          console.log("Previous clicked.");
-        }
-      }, {
-        tooltip: "Play",
-        icon: __dirname + "/images/play.png",
-        flags: ["enabled"],
-        click() {
-          console.log("Play clicked.");
-        }
-      }, {
-        tooltip: "Next Song",
-        icon: __dirname + "/images/next.png",
-        flags: ["enabled"],
-        click() {
-          console.log("Next clicked.");
-        }
-      }])) {
-      console.log("Thumbbar buttons are supported.");
-    } else {
-      console.log("Thumbbar buttons are not supported.");
-    }
   });
 }
 
@@ -386,6 +360,33 @@ function showWindow() {
   win.show();
   shownContextMenu();
   setProgressBar();
+	console.log(__dirname + "/images/previous.png");
+	if (win.setThumbarButtons([{
+			tooltip: "Previous Song",
+			icon: __dirname + "/images/previous.png",
+			flags: ["enabled"],
+			click() {
+				console.log("Previous clicked.");
+			}
+		}, {
+			tooltip: "Play",
+			icon: __dirname + "/images/play.png",
+			flags: ["enabled"],
+			click() {
+				console.log("Play clicked.");
+			}
+		}, {
+			tooltip: "Next Song",
+			icon: __dirname + "/images/next.png",
+			flags: ["enabled"],
+			click() {
+				console.log("Next clicked.");
+			}
+		}])) {
+		console.log("Thumbbar buttons are supported.");
+	} else {
+		console.log("Thumbbar buttons are not supported.");
+	}
 }
 
 function hideWindow() {
