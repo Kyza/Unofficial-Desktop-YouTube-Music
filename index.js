@@ -29,6 +29,8 @@ const path = require("path");
 
 var askedToUpdate = false;
 
+const currentVersion = app.getVersion();
+
 Number.prototype.round = function(places) {
   if (!("" + this).includes("e")) {
     return +(Math.round(this + "e+" + places) + "e-" + places);
@@ -51,7 +53,6 @@ function checkForUpdate() {
     json: true
   }, function(error, response, body) {
     try {
-      var currentVersion = app.getVersion();
       var latestVersion = body[0].tag_name.replace("v", "");
 
       if (currentVersion != latestVersion) {
@@ -210,7 +211,6 @@ let isQuiting;
 let tray;
 let trayMenu;
 
-
 // Set the Discord Rish Presence.
 const client = require('discord-rich-presence')('602320411216052240');
 
@@ -291,8 +291,12 @@ function createWindow() {
       nodeIntegration: true,
       webviewTag: true
     },
-    title: "YouTube Music",
+    title: "YouTube Music v" + currentVersion,
     icon: __dirname + "/images/favicon.png"
+  });
+
+  win.on("page-title-updated", (event) => {
+    event.preventDefault();
   });
 
   tray = new Tray(__dirname + "/images/favicon.png");
