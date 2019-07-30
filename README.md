@@ -15,8 +15,8 @@
   <img src="https://img.shields.io/github/contributors/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
 </p>
 <p align="center">
-  <img src="https://img.shields.io/github/package-json/v/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
   <img src="https://img.shields.io/github/release-pre/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
+  <img src="https://img.shields.io/github/package-json/v/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
 </p>
 <p align="center">
   <img src="https://img.shields.io/github/repo-size/KyzaGitHub/Unofficial-Desktop-YouTube-Music?style=flat-square" />
