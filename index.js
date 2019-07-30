@@ -278,7 +278,10 @@ function setActivity() {
 // Set the taskbar progress.
 function setProgressBar() {
   let progress = ((songCurrentTime - songStartedTime) / (songEndsTime - songStartedTime));
-  win.setProgressBar(progress, { mode: songPaused ? "paused" : "normal" });
+  win.setProgressBar(progress, {
+    mode: songPaused ? "paused" : "normal"
+  });
+	setThumbbarButtons(songPaused);
 }
 
 function createWindow() {
@@ -325,8 +328,7 @@ function createWindow() {
     event.returnValue = false;
   });
 
-  win.on("focus", () => {
-  });
+  win.on("focus", () => {});
 }
 
 function hiddenContextMenu() {
@@ -360,33 +362,42 @@ function showWindow() {
   win.show();
   shownContextMenu();
   setProgressBar();
-	console.log(__dirname + "/images/previous.png");
-	if (win.setThumbarButtons([{
-			tooltip: "Previous Song",
-			icon: __dirname + "/images/previous.png",
-			flags: ["enabled"],
-			click() {
-				console.log("Previous clicked.");
-			}
-		}, {
-			tooltip: "Play",
-			icon: __dirname + "/images/play.png",
-			flags: ["enabled"],
-			click() {
-				console.log("Play clicked.");
-			}
-		}, {
-			tooltip: "Next Song",
-			icon: __dirname + "/images/next.png",
-			flags: ["enabled"],
-			click() {
-				console.log("Next clicked.");
-			}
-		}])) {
-		console.log("Thumbbar buttons are supported.");
-	} else {
-		console.log("Thumbbar buttons are not supported.");
-	}
+  console.log(__dirname + "/images/previous.png");
+  if (setThumbbarButtons(true)) {
+    console.log("Thumbbar buttons are supported.");
+  } else {
+    console.log("Thumbbar buttons are not supported.");
+  }
+}
+
+function setThumbbarButtons(play) {
+  return win.setThumbarButtons([{
+    tooltip: "Previous Song",
+    icon: __dirname + "/images/previous.png",
+    click() {
+      win.webContents.executeJavaScript(`
+					previousTrack();
+			`);
+    }
+  }, {
+    tooltip: play ? "Play" : "Pause",
+    icon: play ? __dirname + "/images/play.png" : __dirname + "/images/pause.png",
+    click() {
+      win.webContents.executeJavaScript(`
+					togglePlaying();
+			`);
+			songPaused = !play;
+			setThumbbarButtons(!play);
+    }
+  }, {
+    tooltip: "Next Song",
+    icon: __dirname + "/images/next.png",
+    click() {
+      win.webContents.executeJavaScript(`
+					nextTrack();
+			`);
+    }
+  }]);
 }
 
 function hideWindow() {
