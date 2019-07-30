@@ -68,7 +68,7 @@ function checkForUpdate() {
 
             opn("https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases");
 
-            downloadInstallNewVersion(body[0].id);
+            downloadNewInstallerVersion(body[0].id);
           }
         });
       }
@@ -84,7 +84,7 @@ function fileExt(fileName) {
   return (/[.]/.exec(fileName)) ? /[^.]+$/.exec(fileName) : undefined;
 }
 
-function downloadInstallNewVersion(versionID) {
+function downloadNewInstallerVersion(versionID) {
   request({
     url: "https://api.github.com/repos/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases/" + versionID + "/assets",
     headers: {
@@ -271,18 +271,17 @@ function setProgressBar() {
   win.setProgressBar(progress, {
     mode: songPaused ? "paused" : "normal"
   });
-	setThumbarButtons(songPaused);
+  setThumbarButtons(songPaused);
 }
 
 function createWindow() {
   checkForUpdate();
   var updateInterval = setInterval(() => {
-    checkForUpdate();
     if (askedToUpdate) {
       clearInterval(updateInterval);
     }
+    checkForUpdate();
   }, 30e3 * 60); // Check for updates every 30 minutes.
-
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -296,7 +295,6 @@ function createWindow() {
     icon: __dirname + "/images/favicon.png"
   });
 
-
   tray = new Tray(__dirname + "/images/favicon.png");
   tray.setToolTip("YouTube Music");
 
@@ -309,7 +307,6 @@ function createWindow() {
   win.setMenu(null);
   win.maximize();
 
-  // and load the index.html of the app.
   win.loadFile("./index.html");
 
   win.on("close", function(event) {
@@ -317,8 +314,6 @@ function createWindow() {
     hideWindow();
     event.returnValue = false;
   });
-
-  win.on("focus", () => {});
 }
 
 function hiddenContextMenu() {
@@ -371,8 +366,8 @@ function setThumbarButtons(play) {
       win.webContents.executeJavaScript(`
 					togglePlaying();
 			`);
-			songPaused = !play;
-			setThumbarButtons(!play);
+      songPaused = !play;
+      setThumbarButtons(!play);
     }
   }, {
     tooltip: "Next Song",
@@ -396,9 +391,6 @@ function quitApp() {
   app.exit(0);
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow();
 
@@ -479,12 +471,9 @@ app.on("before-quit", function() {
 });
 
 app.on("activate", () => {
-  // On macOS it"s common to re-create a window in the app when the
+  // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
