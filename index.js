@@ -362,12 +362,7 @@ function showWindow() {
   win.show();
   shownContextMenu();
   setProgressBar();
-  console.log(__dirname + "/images/previous.png");
-  if (setThumbbarButtons(true)) {
-    console.log("Thumbbar buttons are supported.");
-  } else {
-    console.log("Thumbbar buttons are not supported.");
-  }
+  setThumbbarButtons(true);
 }
 
 function setThumbbarButtons(play) {
