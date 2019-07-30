@@ -21,8 +21,7 @@
     "start": "electron .",
     "build": "electron-builder",
     "build-linux": "electron-builder linux",
-    "build-all": "electron-builder -mwl",
-    "release": "build"
+    "build-all": "electron-builder -mwl"
   },
   "build": {
     "win": {
