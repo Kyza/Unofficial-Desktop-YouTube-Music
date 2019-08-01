@@ -253,9 +253,9 @@ function setActivity() {
       smallImageText: "@Kyza#9994"
     });
   } else {
-    client.updatePresence({
-      state: "Listening to silence",
-      details: "Paused",
+		client.updatePresence({
+      state: "by @Kyza#9994",
+      details: "Absolute Silence",
       startTimestamp: songCurrentTime,
       largeImageKey: 'logo',
       smallImageKey: 'kyza',
