@@ -481,3 +481,19 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+
+
+
+
+
+
+
+
+const spawn = require("child_process").spawn;
+const pythonProcess = spawn('python', ["python/speech-recognition.py"]);
+pythonProcess.stdout.on('data', (data) => {
+  dialog.showMessageBox({
+    'message': `${data}`
+  });
+});
