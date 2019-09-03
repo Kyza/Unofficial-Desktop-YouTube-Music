@@ -352,6 +352,30 @@ function hiddenContextMenu() {
       }
     },
     {
+      label: "Next",
+      click: function() {
+				win.webContents.executeJavaScript(`
+						nextTrack();
+				`);
+      }
+    },
+    {
+      label: "Play/Pause",
+      click: function() {
+				win.webContents.executeJavaScript(`
+						togglePlaying();
+				`);
+      }
+    },
+    {
+      label: "Previous",
+      click: function() {
+				win.webContents.executeJavaScript(`
+						previousTrack();
+				`);
+      }
+    },
+    {
       label: "Quit",
       click: function() {
         quitApp();
@@ -362,7 +386,31 @@ function hiddenContextMenu() {
 }
 
 function shownContextMenu() {
-  trayMenu = Menu.buildFromTemplate([{
+  trayMenu = Menu.buildFromTemplate([
+    {
+      label: "Next",
+      click: function() {
+				win.webContents.executeJavaScript(`
+						nextTrack();
+				`);
+      }
+    },
+    {
+      label: "Play/Pause",
+      click: function() {
+				win.webContents.executeJavaScript(`
+						togglePlaying();
+				`);
+      }
+    },
+    {
+      label: "Previous",
+      click: function() {
+				win.webContents.executeJavaScript(`
+						previousTrack();
+				`);
+      }
+    },{
     label: "Quit",
     click: function() {
       quitApp();
