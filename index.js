@@ -212,7 +212,28 @@ let tray;
 let trayMenu;
 
 // Set the Discord Rish Presence.
-const client = require('discord-rich-presence')('602320411216052240');
+const DiscordRPC = require('discord-rpc');
+const clientId = "602320411216052240";
+DiscordRPC.register(clientId);
+const rpc = new DiscordRPC.Client({
+  transport: 'ipc'
+});
+rpc.login({
+  clientId
+}).catch(console.error);
+
+// Not sure if this works.
+rpc.on('ready', () => {});
+
+
+function handleDiscordState() {
+  if (rpc.user && win) {
+    win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
+  } else if (win) {
+    win.setTitle("YouTube Music v" + currentVersion);
+  }
+}
+setInterval(handleDiscordState, 1e3);
 
 ipcMain.on("rich-presence-data", (event, arg) => {
   setRPData(arg);
@@ -241,25 +262,28 @@ var songPaused = false;
 var lookingForSong = false;
 
 function setActivity() {
+  if (!rpc) {
+    return;
+  }
   if (!songPaused) {
-    client.updatePresence({
+    rpc.setActivity({
       state: songAuthor,
       details: songName,
       startTimestamp: songCurrentTime,
       endTimestamp: songEndsTime,
       largeImageKey: 'logo',
       smallImageKey: 'kyza',
-      largeImageText: "bit.ly/DesktopYTMusic",
+      largeImageText: "bit.ly/DesktopYouTubeMusic",
       smallImageText: "@Kyza#9994"
     });
   } else {
-		client.updatePresence({
+    rpc.setActivity({
       state: "by @Kyza#9994",
       details: "Absolute Silence",
       startTimestamp: songCurrentTime,
       largeImageKey: 'logo',
       smallImageKey: 'kyza',
-      largeImageText: "bit.ly/DesktopYTMusic",
+      largeImageText: "bit.ly/DesktopYouTubeMusic",
       smallImageText: "@Kyza#9994"
     });
   }
@@ -390,7 +414,7 @@ function hideWindow() {
 }
 
 function quitApp() {
-  client.disconnect();
+  rpc.destroy();
   tray.destroy();
   app.exit(0);
 }

@@ -368,7 +368,6 @@ webview.on("did-stop-loading", loadStop);
 
 
 webview[0].addEventListener("ipc-message", function(e) {
-  console.log("RE");
   if (e.channel === "window-data") {
     var webviewDOM = $(document.createElement("html"));
     webviewDOM.html(e.args[0].html);
