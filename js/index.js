@@ -77,3 +77,38 @@ tippy("#listen", {
   placement: "bottom",
   theme: "translucent"
 });
+
+function download(fileName, fileURL) {
+  var element = document.createElement('a');
+  element.setAttribute('href', fileURL);
+  element.setAttribute('download', fileName);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+var version = "";
+$.get("https://api.github.com/repos/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases", function(data) {
+  version = data[0].tag_name.substr(1);
+});
+
+
+var didAdd = false;
+setInterval(() => {
+  if ($("#windows") && !didAdd) {
+    didAdd = true;
+    $("#windows").on("click", () => {
+      download("DesktopYouTubeMusic.Setup." + version + ".exe", "https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases/download/v" + version + "/DesktopYouTubeMusic.Setup." + version + ".exe");
+    });
+
+    $("#linux").on("click", () => {
+      download("DesktopYouTubeMusic.Setup." + version + ".exe", "https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases/download/v" + version + "/DesktopYouTubeMusic-" + version + ".AppImage");
+    });
+  } else {
+    didAdd = false;
+  }
+}, 100);
