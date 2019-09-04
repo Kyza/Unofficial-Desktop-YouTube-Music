@@ -84,7 +84,7 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 - [ ] Spotify-like desktop functions.
   - [x] Persistent window that hides when closed.
   - [x] Control the window with the tray icon.
-  - [ ] Pause, play, skip, and go back to the previous song using the tray.
+  - [x] Pause, play, skip, and go back to the previous song using the tray.
   - [x] Pause, play, skip, and go back to the previous song using the Windows thumbar buttons.
   - [x] Media key support.
   - [ ] Optional open on startup that defaults to off.
