@@ -5,6 +5,9 @@ $("html, body").animate({
 $("#previewImage").tilt({});
 
 $("#topIndicator").hide();
+$("#topIndicator").css("opacity", "0");
+$("#topIndicator").css("pointer-events", "none");
+$("#topIndicator").show();
 
 var startTime = performance.now();
 
@@ -12,35 +15,65 @@ var pageNum = 1;
 
 var lastPage = 3;
 
-$("html").bind("mousewheel", function(e) {
+$("body").bind("mousewheel", function(e) {
   var endTime = performance.now();
 
   if (endTime - startTime > 5e2) {
     startTime = performance.now();
 
-    if (e.originalEvent.wheelDelta / 120 > 0) {
-      if (pageNum - 1 <= 0) return;
-
-      pageNum--;
-    } else {
-      if (pageNum >= lastPage) return;
-
-      pageNum++;
-    }
-
-    if (pageNum == 1) {
-      $("#topIndicator").hide(400);
-      $("#bottomIndicator").show(400);
-    } else if (pageNum == lastPage) {
-      $("#topIndicator").show(400);
-      $("#bottomIndicator").hide(400);
-    } else {
-      $("#topIndicator").show(400);
-      $("#bottomIndicator").show(400);
-    }
-
-    $("html, body").animate({
-      scrollTop: $("#page" + pageNum).offset().top
-    }, 100);
+    scroll(e.originalEvent.wheelDelta / 120 > 0);
   }
+});
+
+$("#topIndicator").click(() => {
+  scroll(true);
+});
+
+$("#bottomIndicator").click(() => {
+  scroll(false);
+});
+
+function scroll(up) {
+  if (up) {
+    if (pageNum - 1 <= 0) return;
+
+    pageNum--;
+  } else {
+    if (pageNum >= lastPage) return;
+
+    pageNum++;
+  }
+
+  $("#topIndicator").show();
+  $("#bottomIndicator").show();
+  if (pageNum == 1) {
+    $("#topIndicator").css("opacity", "0");
+    $("#topIndicator").css("pointer-events", "none");
+
+    $("#bottomIndicator").css("opacity", "1");
+    $("#bottomIndicator").css("pointer-events", "auto");
+  } else if (pageNum == lastPage) {
+    $("#topIndicator").css("opacity", "1");
+    $("#topIndicator").css("pointer-events", "auto");
+
+    $("#bottomIndicator").css("opacity", "0");
+    $("#bottomIndicator").css("pointer-events", "none");
+  } else {
+    $("#topIndicator").css("opacity", "1");
+    $("#topIndicator").css("pointer-events", "auto");
+
+    $("#bottomIndicator").css("opacity", "1");
+    $("#bottomIndicator").css("pointer-events", "auto");
+  }
+
+  $("html, body").animate({
+    scrollTop: $("#page" + pageNum).offset().top
+  }, 100);
+}
+
+tippy("#listen", {
+  content: `<input type="button" id="windows" value="Windows" /><input type="button" id="linux" value="Linux" />`,
+  interactive: true,
+  placement: "bottom",
+  theme: "translucent"
 });

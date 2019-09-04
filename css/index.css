@@ -1,6 +1,8 @@
 * {
   font-family: 'Roboto', sans-serif;
   scroll-behavior: smooth;
+  overflow: hidden;
+  outline: none;
 }
 
 body {
@@ -55,6 +57,7 @@ body {
 .indicator:hover {
   color: white;
   font-size: 3.4em;
+  cursor: pointer;
 }
 
 #topIndicator {
@@ -86,30 +89,38 @@ body {
 #page3 {}
 
 #previewImage {
-  position: absolute;
-  margin: auto;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
 }
 
 #previewImage>img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 70vw;
   height: auto;
+  transform: translate(-50%, -50%);
+  margin: 0px;
+  filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.4));
   transition-duration: 0.4s;
+}
+
+#tippy-1 {
+  height: 60px;
 }
 
 #previewImage>img:hover {
   width: 80vw;
 }
 
-#listen {
+#previewImage>div {
   position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   transform-style: preserve-3d !important;
-  transform: translate3d(-50%, -50%, 20px);
   color: rgb(200, 200, 200);
   font-size: 3em;
   text-decoration: underline;
@@ -120,6 +131,30 @@ body {
   transition-duration: 0.4s;
 }
 
-#listen:hover {
+#previewImage>div:hover {
+  color: white;
   font-size: 3.4em;
+}
+
+#windows {
+  margin-right: 5px;
+}
+
+#linux {
+  margin-left: 5px;
+}
+
+input[type="button"] {
+  font-size: 2em;
+  color: rgb(200, 200, 200);
+  border: none;
+  border-radius: 3px;
+  background-color: rgb(25, 25, 25);
+  transition-duration: 0.4s;
+}
+
+input[type="button"]:hover {
+  background-color: rgb(100, 25, 25);
+  color: white;
+  cursor: pointer;
 }
