@@ -2,7 +2,7 @@ $("html, body").animate({
   scrollTop: $("#page1").offset().top
 }, 100);
 
-$("#previewImage").tilt({});
+$(".previewImage").tilt({});
 
 $("#topIndicator").hide();
 $("#topIndicator").css("opacity", "0");

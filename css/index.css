@@ -88,14 +88,14 @@ body {
 
 #page3 {}
 
-#previewImage {
+.previewImage {
   position: relative;
   width: 100vw;
   height: 100vh;
   user-select: none;
 }
 
-#previewImage>img {
+.previewImage>img {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -107,20 +107,19 @@ body {
   transition-duration: 0.4s;
 }
 
-#tippy-1 {
+.tippy-popper {
   height: 60px;
 }
 
-#previewImage>img:hover {
+.previewImage>img:hover {
   width: 80vw;
 }
 
-#previewImage>div {
+.previewImage>div {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transform-style: preserve-3d !important;
   color: rgb(200, 200, 200);
   font-size: 3em;
   text-decoration: underline;
@@ -131,7 +130,7 @@ body {
   transition-duration: 0.4s;
 }
 
-#previewImage>div:hover {
+.previewImage>div:hover {
   color: white;
   font-size: 3.4em;
 }
