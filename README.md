@@ -119,7 +119,7 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 
 <img src="https://i.vgy.me/pJDHHU.png" />
 
-<img src="https://i.vgy.me/qEGICa.png" />
+<img src="https://i.vgy.me/S9g96s.png" />
 
 <img src="https://i.vgy.me/Cbr2ZB.png" />
 
