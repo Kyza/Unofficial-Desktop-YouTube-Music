@@ -4,6 +4,9 @@
 <p align="center">
   Ever wanted to use YouTube Music but with the functionality of a desktop app like Spotify?
 </p>
+<p align="center">
+  <a href="https://discord.gg/Jj8tXZA"><img src="https://img.shields.io/static/v1?label=Join%20Our%20Discord&message=Click&color=7289da&style=for-the-badge&logo=Discord" /></a>
+</p>
 
 <hr>
 
