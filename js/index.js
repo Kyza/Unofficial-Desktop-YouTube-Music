@@ -78,6 +78,13 @@ tippy("#listen", {
   theme: "translucent"
 });
 
+tippy("#discord", {
+  content: `<input type="button" id="joinDiscord" value="Join Server" />`,
+  interactive: true,
+  placement: "bottom",
+  theme: "translucent"
+});
+
 function download(fileName, fileURL) {
   var element = document.createElement('a');
   element.setAttribute('href', fileURL);
@@ -107,6 +114,10 @@ setInterval(() => {
 
     $("#linux").on("click", () => {
       download("DesktopYouTubeMusic.Setup." + version + ".exe", "https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases/download/v" + version + "/DesktopYouTubeMusic-" + version + ".AppImage");
+    });
+
+    $("#joinDiscord").on("click", () => {
+      window.location = "https://discord.gg/Jj8tXZA";
     });
   } else {
     didAdd = false;
