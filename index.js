@@ -214,10 +214,10 @@ let trayMenu;
 // Set the Discord Rish Presence.
 const DiscordRPC = require('discord-rpc');
 const clientId = "602320411216052240";
-DiscordRPC.register(clientId);
-const rpc = new DiscordRPC.Client({
+var rpc = new DiscordRPC.Client({
   transport: 'ipc'
 });
+DiscordRPC.register(clientId);
 rpc.login({
   clientId
 }).catch(console.error);
@@ -225,21 +225,40 @@ rpc.login({
 // Not sure if this works.
 rpc.on('ready', () => {});
 
+var connectedToDiscord = true;
 
-function handleDiscordState() {
-  if (rpc.user && win) {
-    win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
-  } else if (win) {
-    win.setTitle("YouTube Music v" + currentVersion);
-  }
-}
-setInterval(handleDiscordState, 1e3);
+// Reconnect to Discord.
+// setInterval(() => {
+// }, 1e3);
 
 ipcMain.on("rich-presence-data", (event, arg) => {
   setRPData(arg);
   setProgressBar();
-  setActivity();
 });
+
+setInterval(() => {
+	// Make sure Discord still exists.
+  rpc = new DiscordRPC.Client({
+    transport: 'ipc'
+  });
+  DiscordRPC.register(clientId);
+
+	let couldConnect = false;
+  rpc.login({
+    clientId
+  }).then(() => {
+    couldConnect = true;
+    setActivity();
+  }).finally(() => {
+    if (couldConnect) {
+      connectedToDiscord = true;
+			if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
+    } else {
+      connectedToDiscord = false;
+			if (win) win.setTitle("YouTube Music v" + currentVersion);
+    }
+  }).catch((e) => {});
+}, 1e3);
 
 function setRPData(data) {
   songName = data.songName;
@@ -262,9 +281,7 @@ var songPaused = false;
 var lookingForSong = false;
 
 function setActivity() {
-  if (!rpc) {
-    return;
-  }
+  console.log("Setting activity.");
   if (!songPaused) {
     rpc.setActivity({
       state: songAuthor,
@@ -354,7 +371,7 @@ function hiddenContextMenu() {
     {
       label: "Next",
       click: function() {
-				win.webContents.executeJavaScript(`
+        win.webContents.executeJavaScript(`
 						nextTrack();
 				`);
       }
@@ -362,7 +379,7 @@ function hiddenContextMenu() {
     {
       label: "Play/Pause",
       click: function() {
-				win.webContents.executeJavaScript(`
+        win.webContents.executeJavaScript(`
 						togglePlaying();
 				`);
       }
@@ -370,7 +387,7 @@ function hiddenContextMenu() {
     {
       label: "Previous",
       click: function() {
-				win.webContents.executeJavaScript(`
+        win.webContents.executeJavaScript(`
 						previousTrack();
 				`);
       }
@@ -386,11 +403,10 @@ function hiddenContextMenu() {
 }
 
 function shownContextMenu() {
-  trayMenu = Menu.buildFromTemplate([
-    {
+  trayMenu = Menu.buildFromTemplate([{
       label: "Next",
       click: function() {
-				win.webContents.executeJavaScript(`
+        win.webContents.executeJavaScript(`
 						nextTrack();
 				`);
       }
@@ -398,7 +414,7 @@ function shownContextMenu() {
     {
       label: "Play/Pause",
       click: function() {
-				win.webContents.executeJavaScript(`
+        win.webContents.executeJavaScript(`
 						togglePlaying();
 				`);
       }
@@ -406,16 +422,17 @@ function shownContextMenu() {
     {
       label: "Previous",
       click: function() {
-				win.webContents.executeJavaScript(`
+        win.webContents.executeJavaScript(`
 						previousTrack();
 				`);
       }
-    },{
-    label: "Quit",
-    click: function() {
-      quitApp();
+    }, {
+      label: "Quit",
+      click: function() {
+        quitApp();
+      }
     }
-  }]);
+  ]);
   tray.setContextMenu(trayMenu);
 }
 
