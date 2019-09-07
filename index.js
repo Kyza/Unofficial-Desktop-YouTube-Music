@@ -239,7 +239,7 @@ ipcMain.on("rich-presence-data", (event, arg) => {
 
 // Check connection to Discord.
 setInterval(() => {
-  if (!rpc.user) {
+  if (!rpc.user) { // Garbage
     // Make sure Discord still exists.
     rpc = new DiscordRPC.Client({
       transport: 'ipc'
