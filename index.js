@@ -239,8 +239,10 @@ ipcMain.on("rich-presence-data", (event, arg) => {
 
 // Every 15 seconds, update the connection to Discord and set the activity.
 setInterval(() => {
-  // Make sure Discord still exists.
-  rpc.destroy();
+	if (connectedToDiscord) {
+		rpc.destroy();
+	}
+	// Make sure Discord still exists.
   rpc = new DiscordRPC.Client({
     transport: 'ipc'
   });
