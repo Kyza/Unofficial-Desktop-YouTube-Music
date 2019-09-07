@@ -234,85 +234,87 @@ var connectedToDiscord = true;
 ipcMain.on("rich-presence-data", (event, arg) => {
   setRPData(arg);
   setProgressBar();
+  setActivity();
 });
 
+// Every 15 seconds, update the connection to Discord and set the activity.
 setInterval(() => {
-	// Make sure Discord still exists.
+  // Make sure Discord still exists.
+	rpc.destroy();
   rpc = new DiscordRPC.Client({
     transport: 'ipc'
   });
   DiscordRPC.register(clientId);
 
-	let couldConnect = false;
+  let couldConnect = false;
   rpc.login({
     clientId
   }).then(() => {
     couldConnect = true;
-    setActivity();
   }).finally(() => {
     if (couldConnect) {
       connectedToDiscord = true;
-			if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
+      if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
     } else {
       connectedToDiscord = false;
-			if (win) win.setTitle("YouTube Music v" + currentVersion);
+      if (win) win.setTitle("YouTube Music v" + currentVersion);
     }
-  }).catch((e) => {});
-}, 1e3);
+  }).catch((e) => {
+    console.log(e);
+  });
+}, 15e3);
 
 function setRPData(data) {
-  songName = data.songName;
-  songAuthor = data.songAuthor;
-  songStartedTime = data.songStartedTime;
-  songCurrentTime = data.songCurrentTime;
-  songEndsTime = data.songEndsTime;
-  songPaused = data.songPaused;
+  rpData = data;
 }
 
-var songName = "";
-var songAuthor = "";
-
-var songStartedTime = Date.now();
-var songCurrentTime = Date.now() + 133337;
-var songEndsTime = Date.now() + 133337;
-
-var songPaused = false;
+var rpData = {
+  songName: "",
+  songAuthor: "",
+  songStartedTime: Date.now(),
+  songCurrentTime: Date.now() + 133337,
+  songEndsTime: Date.now() + 133337,
+  songPaused: false
+}
 
 var lookingForSong = false;
 
 function setActivity() {
-  console.log("Setting activity.");
-  if (!songPaused) {
-    rpc.setActivity({
-      state: songAuthor,
-      details: songName,
-      startTimestamp: songCurrentTime,
-      endTimestamp: songEndsTime,
-      largeImageKey: 'logo',
-      smallImageKey: 'kyza',
-      largeImageText: "bit.ly/DesktopYouTubeMusic",
-      smallImageText: "@Kyza#9994"
-    });
-  } else {
-    rpc.setActivity({
-      state: "by @Kyza#9994",
-      details: "Absolute Silence",
-      startTimestamp: songCurrentTime,
-      largeImageKey: 'logo',
-      smallImageKey: 'kyza',
-      largeImageText: "bit.ly/DesktopYouTubeMusic",
-      smallImageText: "@Kyza#9994"
-    });
+  if (connectedToDiscord) {
+    console.log(rpData.songPaused);
+    if (!rpData.songPaused) {
+      console.log(rpData.songName + " - " + rpData.songAuthor);
+      rpc.setActivity({
+        state: rpData.songAuthor,
+        details: rpData.songName,
+        startTimestamp: rpData.songCurrentTime,
+        endTimestamp: rpData.songEndsTime,
+        largeImageKey: 'logo',
+        smallImageKey: 'kyza',
+        largeImageText: "https://ytm.kyza.gq/",
+        smallImageText: "@Kyza#9994"
+      });
+    } else {
+      rpc.setActivity({
+        state: "by @Kyza#9994",
+        details: "Absolute Silence",
+        startTimestamp: rpData.songCurrentTime,
+        largeImageKey: 'logo',
+        smallImageKey: 'kyza',
+        largeImageText: "https://ytm.kyza.gq/",
+        smallImageText: "@Kyza#9994"
+      });
+    }
   }
 }
 
 // Set the taskbar progress.
 function setProgressBar() {
-  let progress = ((songCurrentTime - songStartedTime) / (songEndsTime - songStartedTime));
+  let progress = ((rpData.songCurrentTime - rpData.songStartedTime) / (rpData.songEndsTime - rpData.songStartedTime));
   win.setProgressBar(progress, {
-    mode: songPaused ? "paused" : "normal"
+    mode: rpData.songPaused ? "paused" : "normal"
   });
-  setThumbarButtons(songPaused);
+  setThumbarButtons(rpData.songPaused);
 }
 
 function createWindow() {
