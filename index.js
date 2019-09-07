@@ -259,7 +259,7 @@ setInterval(() => {
       connectedToDiscord = false;
       if (win) win.setTitle("YouTube Music v" + currentVersion);
     }
-  });
+  }).catch((e) => {});
 }, 1e3);
 
 function setRPData(data) {
