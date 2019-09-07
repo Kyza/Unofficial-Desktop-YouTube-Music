@@ -240,7 +240,7 @@ ipcMain.on("rich-presence-data", (event, arg) => {
 // Every 15 seconds, update the connection to Discord and set the activity.
 setInterval(() => {
   // Make sure Discord still exists.
-	rpc.destroy();
+  rpc.destroy();
   rpc = new DiscordRPC.Client({
     transport: 'ipc'
   });
@@ -291,7 +291,7 @@ function setActivity() {
         smallImageKey: 'kyza',
         largeImageText: "https://ytm.kyza.gq/",
         smallImageText: "@Kyza#9994"
-      });
+      }).catch((e) => {});
     } else {
       rpc.setActivity({
         state: "by @Kyza#9994",
@@ -301,7 +301,7 @@ function setActivity() {
         smallImageKey: 'kyza',
         largeImageText: "https://ytm.kyza.gq/",
         smallImageText: "@Kyza#9994"
-      });
+      }).catch((e) => {});
     }
   }
 }
