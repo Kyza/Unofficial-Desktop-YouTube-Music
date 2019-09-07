@@ -234,7 +234,6 @@ var connectedToDiscord = true;
 ipcMain.on("rich-presence-data", (event, arg) => {
   setRPData(arg);
   setProgressBar();
-  setActivity();
 });
 
 // Every 15 seconds, update the connection to Discord and set the activity.
@@ -257,6 +256,7 @@ setInterval(() => {
     if (couldConnect) {
       connectedToDiscord = true;
       if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
+			setActivity();
     } else {
       connectedToDiscord = false;
       if (win) win.setTitle("YouTube Music v" + currentVersion);
@@ -281,9 +281,7 @@ var lookingForSong = false;
 
 function setActivity() {
   if (connectedToDiscord) {
-    console.log(rpData.songPaused);
     if (!rpData.songPaused) {
-      console.log(rpData.songName + " - " + rpData.songAuthor);
       rpc.setActivity({
         state: rpData.songAuthor,
         details: rpData.songName,
