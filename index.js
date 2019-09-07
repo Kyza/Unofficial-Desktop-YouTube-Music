@@ -259,10 +259,8 @@ setInterval(() => {
       connectedToDiscord = false;
       if (win) win.setTitle("YouTube Music v" + currentVersion);
     }
-  }).catch((e) => {
-    console.log(e);
   });
-}, 15e3);
+}, 1e3);
 
 function setRPData(data) {
   rpData = data;
