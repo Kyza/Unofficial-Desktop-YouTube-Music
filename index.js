@@ -234,34 +234,37 @@ var connectedToDiscord = true;
 ipcMain.on("rich-presence-data", (event, arg) => {
   setRPData(arg);
   setProgressBar();
+	setActivity();
 });
 
-// Every 15 seconds, update the connection to Discord and set the activity.
+// Check connection to Discord.
 setInterval(() => {
-	if (connectedToDiscord) {
-		rpc.destroy();
-	}
-	// Make sure Discord still exists.
-  rpc = new DiscordRPC.Client({
-    transport: 'ipc'
-  });
-  DiscordRPC.register(clientId);
+  if (!rpc.user) {
+    // Make sure Discord still exists.
+    rpc = new DiscordRPC.Client({
+      transport: 'ipc'
+    });
+    DiscordRPC.register(clientId);
 
-  let couldConnect = false;
-  rpc.login({
-    clientId
-  }).then(() => {
-    couldConnect = true;
-  }).finally(() => {
-    if (couldConnect) {
-      connectedToDiscord = true;
-      if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
-			setActivity();
-    } else {
-      connectedToDiscord = false;
-      if (win) win.setTitle("YouTube Music v" + currentVersion);
-    }
-  }).catch((e) => {});
+    let couldConnect = false;
+    rpc.login({
+      clientId
+    }).then(() => {
+      couldConnect = true;
+    }).finally(() => {
+      if (couldConnect) {
+				connectedToDiscord = true;
+        if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
+        setActivity();
+      } else {
+        connectedToDiscord = false;
+        if (win) win.setTitle("YouTube Music v" + currentVersion);
+      }
+    }).catch((e) => {});
+  } else {
+		connectedToDiscord = true;
+		if (win) win.setTitle("YouTube Music v" + currentVersion + " - Synced With Discord");
+	}
 }, 1e3);
 
 function setRPData(data) {
