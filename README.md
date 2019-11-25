@@ -107,8 +107,11 @@ I use [Electron](https://electronjs.org/) to make and modify the app, adding fea
 - It won't update! This is because I recently changed the name of the GitHub repository.
   - Make sure you download the latest working version of the app from the [releases](https://github.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/releases).
   
-- Rarely, the installer fails to open because it is still locked by the automatic update downloader.
+- Very rarely, the installer fails to open because it is still locked by the automatic update downloader.
   - Just restart the app and try the update again.
+  
+- A memory leak occurs when your device loses internet connection for an extended period of time.
+  - Fixed in 1.0.0.
 
 # Images
 
