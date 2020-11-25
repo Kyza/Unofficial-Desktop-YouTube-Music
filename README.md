@@ -1,4 +1,8 @@
 <p align="center">
+ <h1><a href="https://github.com/KyzaGitHub/desktop-youtube">PLEASE CHECK THIS ACTIVE REWRITE OUT BY ME</a></h1>
+</p>
+
+<p align="center">
   <img width="25%" height="auto" src="https://raw.githubusercontent.com/KyzaGitHub/Unofficial-Desktop-YouTube-Music/master/images/logo.png" />
 </p>
 <p align="center">
